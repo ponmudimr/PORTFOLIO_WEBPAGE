@@ -100,7 +100,7 @@ const PROJECTS=[
 ];
 
 const CERTS=[
-  {title:'NHIDE 2026 — 1st Prize',by:'National Hardware Innovation & Design Expo',year:'2026',cat:'Award',id:'₹50,000 · Team 404'},
+  {title:'NHIDE 2026 — 1st Prize · Solar Powered RF Communication',by:'National Hackathon for Innovation, Design & Entrepreneurship — Guru Ghasidas Vishwavidyalaya',year:'2026',cat:'Award',id:'1st Prize · CBDE Initiative',img:'assets/nhide-certificate.jpg'},
   {title:'VishwaNova 2026 Finalist',by:'MIT-WPU Pune',year:'2026',cat:'Competition',id:'Team 404 / TribalNet'},
   {title:'YUKTHI Idea/PoC Submission',by:'BIT Special Lab',year:'2026',cat:'Academic',id:'PS Portal Submission'},
   {title:'GP Challenge BPI Industry Visit',by:'Powerloom, Kumarapalayam',year:'2026',cat:'Academic',id:'Geotagged Report'},

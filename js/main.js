@@ -93,7 +93,6 @@ const PROJECTS=[
       'TribalNet: ₹1,500/node BOM — NHIDE 2026 1st Prize',
       'LEO-PNT: Orbcomm / Iridium opportunistic positioning',
       'LEO-PNT: IMU sensor fusion for inertial bridging',
-      'IEEE YESIST12 National Finalist (ID: 3280)',
     ],
     challenges:'For TribalNet: achieving reliable mesh routing under dense forest canopy at 433 MHz required adaptive power control. For LEO-PNT: Doppler shift correction on Orbcomm bursts at 137 MHz demanded real-time DSP tuning.',
     future:'TribalNet: SOS beacon mode, solar-powered nodes. LEO-PNT: patent filing (IPC G01S19/00), integration with military PNT standards.',
@@ -101,7 +100,6 @@ const PROJECTS=[
 ];
 
 const CERTS=[
-  {title:'IEEE YESIST12 National Finalist',by:'IEEE — Hardware/IoT Track',year:'2026',cat:'Award',id:'ID: 3280 · TribalNet'},
   {title:'NHIDE 2026 — 1st Prize',by:'National Hardware Innovation & Design Expo',year:'2026',cat:'Award',id:'₹50,000 · Team 404'},
   {title:'VishwaNova 2026 Finalist',by:'MIT-WPU Pune',year:'2026',cat:'Competition',id:'Team 404 / TribalNet'},
   {title:'YUKTHI Idea/PoC Submission',by:'BIT Special Lab',year:'2026',cat:'Academic',id:'PS Portal Submission'},

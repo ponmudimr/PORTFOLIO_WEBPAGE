@@ -5,241 +5,13 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Ponmudi M R — ECE Engineer & Innovator</title>
 <meta name="description" content="Portfolio of Ponmudi M R — ECE Student, Embedded Systems Developer, Defense Tech Innovator at Bannari Amman Institute of Technology."/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
-<style>
-:root{
-  --c:#00f5ff;--c2:#7b2fff;--c3:#0066ff;--bg:#030810;--bg2:#060d1a;--bg3:#0a1428;
-  --glass:rgba(0,245,255,0.04);--glass2:rgba(123,47,255,0.06);
-  --border:rgba(0,245,255,0.15);--border2:rgba(123,47,255,0.2);
-  --text:#e8f4ff;--text2:#8ab4cc;--text3:#4a7a9b;
-  --glow:0 0 20px rgba(0,245,255,0.4);--glow2:0 0 30px rgba(123,47,255,0.5);
-  --font-head:'Orbitron',monospace;--font-body:'Rajdhani',sans-serif;--font-mono:'JetBrains Mono',monospace;
-}
-.light-mode{
-  --bg:#f0f4ff;--bg2:#e8eeff;--bg3:#dde6ff;
-  --glass:rgba(0,80,200,0.05);--glass2:rgba(100,0,200,0.05);
-  --border:rgba(0,80,200,0.2);--border2:rgba(100,0,200,0.2);
-  --text:#0a1428;--text2:#2a4a6a;--text3:#5a7a9a;
-  --c:#0055cc;--c2:#6600cc;
-}
-*{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth}
-html{font-size:16px}
-body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;cursor:none}
-
-/* CURSOR */
-#cursor{position:fixed;width:12px;height:12px;background:var(--c);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s;box-shadow:var(--glow)}
-#cursor-ring{position:fixed;width:36px;height:36px;border:1px solid var(--c);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .15s,width .2s,height .2s;opacity:.5}
-body:hover #cursor{opacity:1}
-
-/* SCROLLBAR */
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--c);border-radius:2px}
-
-/* LOADING */
-#loader{position:fixed;inset:0;background:var(--bg);z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s}
-#loader.hide{opacity:0;pointer-events:none}
-.loader-text{font-family:var(--font-head);color:var(--c);font-size:clamp(1rem,3vw,1.5rem);letter-spacing:.3em;margin-bottom:2rem}
-.loader-bar{width:200px;height:2px;background:rgba(0,245,255,.1);border-radius:1px;overflow:hidden}
-.loader-fill{height:100%;background:linear-gradient(90deg,var(--c),var(--c2));width:0;animation:loadfill 2s ease forwards}
-@keyframes loadfill{to{width:100%}}
-.loader-pct{font-family:var(--font-mono);color:var(--text3);font-size:.75rem;margin-top:.5rem;letter-spacing:.2em}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;background:rgba(3,8,16,.7);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .3s}
-.nav-logo{font-family:var(--font-head);font-size:1.1rem;color:var(--c);letter-spacing:.15em;text-shadow:var(--glow)}
-.nav-links{display:flex;gap:1.5rem;list-style:none}
-.nav-links a{font-family:var(--font-body);font-size:.85rem;color:var(--text2);text-decoration:none;letter-spacing:.1em;font-weight:500;transition:color .2s,text-shadow .2s;text-transform:uppercase}
-.nav-links a:hover{color:var(--c);text-shadow:var(--glow)}
-.nav-right{display:flex;align-items:center;gap:1rem}
-.theme-btn{background:none;border:1px solid var(--border);color:var(--text2);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1rem;transition:all .2s;display:flex;align-items:center;justify-content:center}
-.theme-btn:hover{border-color:var(--c);color:var(--c);box-shadow:var(--glow)}
-.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
-.hamburger span{display:block;width:22px;height:2px;background:var(--c);border-radius:1px;transition:.3s}
-@media(max-width:768px){
-  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(3,8,16,.97);flex-direction:column;padding:1.5rem 2rem;border-bottom:1px solid var(--border)}
-  .nav-links.open{display:flex}
-  .hamburger{display:flex}
-}
-
-/* CANVAS BG */
-#bg-canvas{position:fixed;inset:0;z-index:0;opacity:.5}
-
-/* HERO */
-#hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:6rem 2rem 4rem;z-index:1}
-.hero-inner{max-width:900px;animation:fadeUp 1s ease .3s both}
-.hero-badge{display:inline-block;font-family:var(--font-mono);font-size:.7rem;color:var(--c);border:1px solid var(--border);padding:.3rem 1rem;border-radius:2px;letter-spacing:.2em;margin-bottom:2rem;background:var(--glass)}
-.hero-name{font-family:var(--font-head);font-size:clamp(2.5rem,8vw,5.5rem);font-weight:900;line-height:1;letter-spacing:-.02em;margin-bottom:1rem;background:linear-gradient(135deg,#fff 0%,var(--c) 50%,var(--c2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 30px rgba(0,245,255,.3))}
-.hero-subtitle{font-family:var(--font-body);font-size:clamp(1rem,2.5vw,1.3rem);color:var(--text2);min-height:2rem;letter-spacing:.05em;margin-bottom:2.5rem}
-#typed-cursor{display:inline-block;width:2px;height:1.2em;background:var(--c);vertical-align:middle;animation:blink .7s infinite}
-@keyframes blink{50%{opacity:0}}
-.hero-ctas{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem}
-.btn-primary{font-family:var(--font-head);font-size:.75rem;letter-spacing:.15em;padding:.8rem 2rem;background:transparent;border:1px solid var(--c);color:var(--c);border-radius:2px;cursor:pointer;text-decoration:none;transition:all .3s;position:relative;overflow:hidden}
-.btn-primary::before{content:'';position:absolute;inset:0;background:var(--c);transform:translateX(-101%);transition:transform .3s}
-.btn-primary:hover::before{transform:translateX(0)}
-.btn-primary:hover{color:var(--bg)}
-.btn-primary span{position:relative;z-index:1}
-.btn-secondary{font-family:var(--font-head);font-size:.75rem;letter-spacing:.15em;padding:.8rem 2rem;background:transparent;border:1px solid var(--border2);color:var(--c2);border-radius:2px;cursor:pointer;text-decoration:none;transition:all .3s}
-.btn-secondary:hover{border-color:var(--c2);box-shadow:var(--glow2);background:var(--glass2)}
-.scroll-indicator{display:flex;flex-direction:column;align-items:center;gap:.5rem;color:var(--text3);font-family:var(--font-mono);font-size:.65rem;letter-spacing:.2em;animation:float 2s ease-in-out infinite}
-.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--c),transparent)}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
-
-/* SECTION COMMON */
-section{position:relative;z-index:1;padding:6rem 2rem}
-.section-inner{max-width:1100px;margin:0 auto}
-.section-tag{font-family:var(--font-mono);font-size:.7rem;color:var(--c);letter-spacing:.25em;text-transform:uppercase;margin-bottom:.75rem;opacity:.8}
-.section-title{font-family:var(--font-head);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.5rem;color:var(--text)}
-.section-line{width:60px;height:2px;background:linear-gradient(90deg,var(--c),var(--c2));border-radius:1px;margin-bottom:3rem}
-
-/* ABOUT */
-.about-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:3rem;align-items:start}
-@media(max-width:768px){.about-grid{grid-template-columns:1fr}}
-.profile-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:2rem;text-align:center;position:relative;overflow:hidden}
-.profile-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c),var(--c2))}
-.profile-avatar{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--c),var(--c2));display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-family:var(--font-head);font-size:1.8rem;color:var(--bg);font-weight:900;box-shadow:0 0 30px rgba(0,245,255,.4)}
-.profile-name{font-family:var(--font-head);font-size:1.1rem;color:var(--text);letter-spacing:.1em;margin-bottom:.25rem}
-.profile-role{font-size:.85rem;color:var(--c);letter-spacing:.1em;margin-bottom:1.2rem}
-.profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1.5rem}
-.stat-item{background:var(--bg3);border:1px solid var(--border);border-radius:2px;padding:.75rem;text-align:center}
-.stat-num{font-family:var(--font-head);font-size:1.3rem;color:var(--c);font-weight:700}
-.stat-label{font-size:.75rem;color:var(--text3);letter-spacing:.1em}
-.about-bio{font-size:1rem;color:var(--text2);line-height:1.8;margin-bottom:2.5rem}
-.timeline{display:flex;flex-direction:column;gap:1.25rem}
-.tl-item{display:flex;gap:1rem;align-items:flex-start}
-.tl-dot{flex-shrink:0;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:var(--glow);margin-top:.35rem;position:relative}
-.tl-dot::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:18px;height:18px;border:1px solid var(--c);border-radius:50%;opacity:.4}
-.tl-year{font-family:var(--font-mono);font-size:.7rem;color:var(--c2);min-width:3rem;margin-top:.1rem}
-.tl-content h4{font-family:var(--font-body);font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:.2rem}
-.tl-content p{font-size:.82rem;color:var(--text3)}
-
-/* SKILLS */
-.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem}
-.skill-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1.5rem 1rem;text-align:center;transition:all .3s;cursor:default;position:relative;overflow:hidden}
-.skill-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,var(--c) 0%,transparent 70%);opacity:0;transition:opacity .3s}
-.skill-card:hover{border-color:var(--c);transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,245,255,.2)}
-.skill-card:hover::after{opacity:.04}
-.skill-icon{font-size:2rem;margin-bottom:.75rem;display:block}
-.skill-name{font-family:var(--font-body);font-size:.85rem;font-weight:600;color:var(--text);letter-spacing:.05em}
-.skill-level{height:2px;background:var(--bg3);border-radius:1px;margin-top:.75rem;overflow:hidden}
-.skill-fill{height:100%;background:linear-gradient(90deg,var(--c),var(--c2));border-radius:1px;transform-origin:left;transform:scaleX(0);transition:transform 1s ease}
-.skill-card.visible .skill-fill{transform:scaleX(1)}
-
-/* PROJECTS */
-.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem;margin-bottom:2rem}
-.project-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1.75rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
-.project-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(to bottom,var(--c),var(--c2));transform:scaleY(0);transform-origin:top;transition:transform .3s}
-.project-card:hover::before{transform:scaleY(1)}
-.project-card:hover{border-color:rgba(0,245,255,.3);background:rgba(0,245,255,.06);transform:translateY(-2px)}
-.project-num{font-family:var(--font-mono);font-size:.65rem;color:var(--c2);letter-spacing:.2em;margin-bottom:.75rem}
-.project-title{font-family:var(--font-head);font-size:.95rem;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:.75rem;letter-spacing:.02em}
-.project-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
-.tag{font-family:var(--font-mono);font-size:.62rem;padding:.2rem .6rem;border-radius:2px;background:var(--bg3);border:1px solid var(--border);color:var(--text3);letter-spacing:.1em}
-.project-arrow{font-size:.75rem;color:var(--c);letter-spacing:.1em;display:flex;align-items:center;gap:.4rem;font-family:var(--font-mono)}
-
-/* PROJECT MODAL */
-#modal-overlay{position:fixed;inset:0;background:rgba(3,8,16,.95);z-index:2000;display:flex;align-items:flex-start;justify-content:center;padding:5rem 1rem 2rem;opacity:0;pointer-events:none;transition:opacity .4s;overflow-y:auto}
-#modal-overlay.open{opacity:1;pointer-events:all}
-.modal-box{background:var(--bg2);border:1px solid var(--border);border-radius:6px;max-width:800px;width:100%;padding:2.5rem;position:relative;transform:translateY(30px);transition:transform .4s;max-height:90vh;overflow-y:auto}
-#modal-overlay.open .modal-box{transform:translateY(0)}
-.modal-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:1px solid var(--border);color:var(--text2);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.1rem;transition:all .2s;display:flex;align-items:center;justify-content:center}
-.modal-close:hover{border-color:var(--c);color:var(--c)}
-.modal-num{font-family:var(--font-mono);font-size:.65rem;color:var(--c2);letter-spacing:.2em;margin-bottom:.5rem}
-.modal-title{font-family:var(--font-head);font-size:clamp(1.1rem,3vw,1.5rem);font-weight:700;color:var(--text);margin-bottom:1.5rem;line-height:1.3}
-.modal-section{margin-bottom:1.5rem}
-.modal-section h4{font-family:var(--font-mono);font-size:.7rem;color:var(--c);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.6rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
-.modal-section p,.modal-section ul{font-size:.92rem;color:var(--text2);line-height:1.8}
-.modal-section ul{padding-left:1.25rem}
-.modal-section li{margin-bottom:.3rem}
-.modal-tags{display:flex;flex-wrap:wrap;gap:.5rem}
-.modal-btn-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:2rem}
-.modal-image-placeholder{width:100%;height:180px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.75rem;color:var(--text3);letter-spacing:.1em;margin-bottom:1.5rem}
-
-/* CERTS */
-.certs-filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem}
-.filter-btn{font-family:var(--font-mono);font-size:.7rem;padding:.4rem 1rem;border:1px solid var(--border);background:transparent;color:var(--text3);border-radius:2px;cursor:pointer;letter-spacing:.1em;transition:all .2s}
-.filter-btn.active,.filter-btn:hover{border-color:var(--c);color:var(--c);background:var(--glass)}
-.certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
-.cert-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1.5rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
-.cert-card:hover{border-color:var(--c);transform:scale(1.02);box-shadow:0 8px 30px rgba(0,245,255,.15)}
-.cert-badge{font-family:var(--font-mono);font-size:.6rem;color:var(--c2);letter-spacing:.15em;margin-bottom:.5rem;background:var(--glass2);padding:.2rem .6rem;border-radius:2px;display:inline-block;border:1px solid var(--border2)}
-.cert-title{font-family:var(--font-body);font-size:.95rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
-.cert-by{font-size:.8rem;color:var(--text3)}
-.cert-year{position:absolute;top:1rem;right:1rem;font-family:var(--font-mono);font-size:.65rem;color:var(--text3)}
-.cert-modal{position:fixed;inset:0;background:rgba(3,8,16,.97);z-index:3000;display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;pointer-events:none;transition:opacity .3s}
-.cert-modal.open{opacity:1;pointer-events:all}
-.cert-modal-inner{background:var(--bg2);border:1px solid var(--border);border-radius:6px;max-width:600px;width:100%;padding:2rem;position:relative;text-align:center}
-.cert-large{width:100%;height:300px;background:linear-gradient(135deg,var(--bg3),var(--bg));border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;font-family:var(--font-mono);font-size:.9rem;color:var(--c);letter-spacing:.1em}
-
-/* RESUME */
-.resume-wrap{display:grid;grid-template-columns:1fr 1.5fr;gap:3rem;align-items:center}
-@media(max-width:768px){.resume-wrap{grid-template-columns:1fr}}
-.resume-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:2rem;position:relative;overflow:hidden}
-.resume-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c),var(--c2))}
-.resume-preview{width:100%;height:320px;background:linear-gradient(160deg,var(--bg3) 0%,var(--bg2) 100%);border:1px solid var(--border);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;font-family:var(--font-mono);font-size:.75rem;color:var(--text3);letter-spacing:.1em;position:relative;overflow:hidden}
-.resume-lines{position:absolute;inset:.75rem;display:flex;flex-direction:column;gap:.4rem;opacity:.15}
-.resume-line{height:2px;background:var(--c);border-radius:1px}
-.resume-line:nth-child(odd){width:85%}
-.resume-line:nth-child(even){width:60%}
-.resume-info h3{font-family:var(--font-head);font-size:1.4rem;margin-bottom:.75rem;color:var(--text)}
-.resume-info p{font-size:.9rem;color:var(--text2);line-height:1.7;margin-bottom:2rem}
-.resume-meta{display:flex;flex-direction:column;gap:.5rem;margin-bottom:2rem}
-.meta-row{display:flex;align-items:center;gap:.75rem;font-family:var(--font-mono);font-size:.75rem;color:var(--text3)}
-.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--c)}
-
-/* CONTACT */
-.contact-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-bottom:3rem}
-.contact-card{background:var(--glass);border:1px solid var(--border);border-radius:4px;padding:1.5rem;display:flex;align-items:center;gap:1rem;text-decoration:none;color:var(--text);transition:all .3s;position:relative;overflow:hidden}
-.contact-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at left,var(--c) 0%,transparent 60%);opacity:0;transition:opacity .3s}
-.contact-card:hover::before{opacity:.04}
-.contact-card:hover{border-color:var(--c);transform:translateX(4px)}
-.contact-icon{width:44px;height:44px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;transition:all .3s}
-.contact-card:hover .contact-icon{border-color:var(--c);box-shadow:var(--glow)}
-.contact-label{font-size:.75rem;color:var(--text3);letter-spacing:.1em;margin-bottom:.2rem;font-family:var(--font-mono)}
-.contact-value{font-size:.9rem;font-weight:600;color:var(--text)}
-.contact-cta{text-align:center;padding:2rem 0}
-.contact-cta p{font-size:1rem;color:var(--text2);margin-bottom:1.5rem}
-
-/* FOOTER */
-footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:2rem;text-align:center;font-family:var(--font-mono);font-size:.7rem;color:var(--text3);letter-spacing:.1em}
-footer span{color:var(--c)}
-
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
-.fade-up.visible{opacity:1;transform:translateY(0)}
-
-/* MOBILE NAV FIX */
-@media(max-width:480px){
-  nav{padding:.75rem 1rem}
-  section{padding:4rem 1rem}
-  .hero-inner{padding:0 .5rem}
-  .projects-grid{grid-template-columns:1fr}
-  .certs-grid{grid-template-columns:1fr}
-  .contact-grid{grid-template-columns:1fr}
-}
-</style>
+<link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
 
-<!-- CURSOR -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
-
-<!-- LOADER -->
-<div id="loader">
-  <div class="loader-text">INITIALIZING</div>
-  <div class="loader-bar"><div class="loader-fill"></div></div>
-  <div class="loader-pct" id="pct">0%</div>
-</div>
-
-<!-- BACKGROUND CANVAS -->
-<canvas id="bg-canvas"></canvas>
-
 <!-- NAVIGATION -->
 <nav id="navbar">
-  <div class="nav-logo">PMR<span style="color:var(--c2)">.</span>DEV</div>
+  <div class="nav-logo">Ponmudi M R</div>
   <ul class="nav-links" id="nav-links">
     <li><a href="#about" class="nav-link">About</a></li>
     <li><a href="#skills" class="nav-link">Skills</a></li>
@@ -249,7 +21,7 @@ footer span{color:var(--c)}
     <li><a href="#contact" class="nav-link">Contact</a></li>
   </ul>
   <div class="nav-right">
-    <button class="theme-btn" id="theme-btn" title="Toggle theme">☀</button>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">🌙</button>
     <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -259,16 +31,16 @@ footer span{color:var(--c)}
 <!-- HERO -->
 <section id="hero">
   <div class="hero-inner">
-    <div class="hero-badge">// ECE ENGINEER & INNOVATOR · BATCH 2022–2026</div>
-    <h1 class="hero-name">PONMUDI M R</h1>
+    <div class="hero-badge">ECE Engineer &amp; Innovator · Batch 2022–2026</div>
+    <h1 class="hero-name">Ponmudi M R</h1>
     <div class="hero-subtitle"><span id="typed"></span><span id="typed-cursor"></span></div>
     <div class="hero-ctas">
-      <a href="#projects" class="btn-primary"><span>[ VIEW PROJECTS ]</span></a>
-      <a href="#contact" class="btn-secondary">[ CONTACT ME ]</a>
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#contact" class="btn-secondary">Contact Me</a>
     </div>
     <div class="scroll-indicator">
       <div class="scroll-line"></div>
-      <span>SCROLL</span>
+      <span>Scroll</span>
     </div>
   </div>
 </section>
@@ -277,29 +49,28 @@ footer span{color:var(--c)}
 <section id="about">
   <div class="section-inner">
     <div class="fade-up">
-      <div class="section-tag">// 01 · ABOUT</div>
+      <div class="section-tag">About</div>
       <h2 class="section-title">Who Am I</h2>
-      <div class="section-line"></div>
     </div>
     <div class="about-grid fade-up">
       <div>
         <div class="profile-card">
           <div class="profile-avatar">PM</div>
-          <div class="profile-name">PONMUDI M R</div>
+          <div class="profile-name">Ponmudi M R</div>
           <div class="profile-role">Roll No. 22EC004</div>
-          <div style="font-size:.8rem;color:var(--text3);font-family:var(--font-mono)">Bannari Amman Institute of Technology</div>
-          <div style="font-size:.75rem;color:var(--text3);margin-top:.25rem">Sathyamangalam, Tamil Nadu</div>
+          <div style="font-size:.85rem;color:var(--text3)">Bannari Amman Institute of Technology</div>
+          <div style="font-size:.8rem;color:var(--text3);margin-top:.25rem">Sathyamangalam, Tamil Nadu</div>
           <div class="profile-stats">
-            <div class="stat-item"><div class="stat-num" style="color:var(--c)">3+</div><div class="stat-label">PROJECTS</div></div>
-            <div class="stat-item"><div class="stat-num" style="color:var(--c2)">₹50K</div><div class="stat-label">PRIZE WON</div></div>
-            <div class="stat-item"><div class="stat-num" style="color:var(--c)">IEEE</div><div class="stat-label">MEMBER</div></div>
-            <div class="stat-item"><div class="stat-num" style="color:var(--c2)">2026</div><div class="stat-label">GRADUATING</div></div>
+            <div class="stat-item"><div class="stat-num">3+</div><div class="stat-label">PROJECTS</div></div>
+            <div class="stat-item"><div class="stat-num">₹50K</div><div class="stat-label">PRIZE WON</div></div>
+            <div class="stat-item"><div class="stat-num">IEEE</div><div class="stat-label">MEMBER</div></div>
+            <div class="stat-item"><div class="stat-num">2026</div><div class="stat-label">GRADUATING</div></div>
           </div>
         </div>
       </div>
       <div>
         <p class="about-bio">
-          Final-year Electronics & Communication Engineering student at Bannari Amman Institute of Technology with a deep passion for embedded systems, RF/SDR communications, and defense-oriented technology. I lead Team 404 (with Dinesh & Pratiksha) and have built systems ranging from LoRa mesh networks deployed for rural connectivity to LEO satellite positioning receivers. I am actively seeking research roles at DRDO, ISRO, and NIT Trichy.
+          Final-year Electronics &amp; Communication Engineering student at Bannari Amman Institute of Technology with a deep passion for embedded systems, RF/SDR communications, and defense-oriented technology. I lead Team 404 (with Dinesh &amp; Pratiksha) and have built systems ranging from LoRa mesh networks deployed for rural connectivity to LEO satellite positioning receivers. I am actively seeking research roles at DRDO, ISRO, and NIT Trichy.
         </p>
         <div class="timeline">
           <div class="tl-item">
@@ -311,8 +82,8 @@ footer span{color:var(--c)}
             </div>
           </div>
           <div class="tl-item">
-            <div class="tl-dot" style="background:var(--c2);box-shadow:var(--glow2)"></div>
-            <div class="tl-year" style="color:var(--c)">2026</div>
+            <div class="tl-dot"></div>
+            <div class="tl-year">2026</div>
             <div class="tl-content">
               <h4>NHIDE 2026 — 1st Prize ₹50,000</h4>
               <p>National Hardware Innovation & Design Expo — Team 404 / TribalNet</p>
@@ -327,8 +98,8 @@ footer span{color:var(--c)}
             </div>
           </div>
           <div class="tl-item">
-            <div class="tl-dot" style="background:var(--c2);box-shadow:var(--glow2)"></div>
-            <div class="tl-year" style="color:var(--c)">2022</div>
+            <div class="tl-dot"></div>
+            <div class="tl-year">2022</div>
             <div class="tl-content">
               <h4>Joined BIT — ECE Dept.</h4>
               <p>Roll No. 22EC004 · Active in IEEE, BIT-IECC & AViNYA Club</p>
@@ -341,16 +112,13 @@ footer span{color:var(--c)}
 </section>
 
 <!-- SKILLS -->
-<section id="skills" style="background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)">
+<section id="skills" style="background:var(--bg2)">
   <div class="section-inner">
     <div class="fade-up">
-      <div class="section-tag">// 02 · SKILLS</div>
+      <div class="section-tag">Skills</div>
       <h2 class="section-title">Technical Arsenal</h2>
-      <div class="section-line"></div>
     </div>
-    <div class="skills-grid" id="skills-grid">
-      <!-- generated by JS -->
-    </div>
+    <div class="skills-grid" id="skills-grid"></div>
   </div>
 </section>
 
@@ -358,14 +126,10 @@ footer span{color:var(--c)}
 <section id="projects">
   <div class="section-inner">
     <div class="fade-up">
-      <div class="section-tag">// 03 · PROJECTS</div>
+      <div class="section-tag">Projects</div>
       <h2 class="section-title">Engineering Work</h2>
-      <div class="section-line"></div>
-      <p style="color:var(--text3);font-size:.85rem;font-family:var(--font-mono);margin-bottom:2rem;letter-spacing:.05em">— CLICK ANY PROJECT CARD TO EXPLORE FULL DETAILS —</p>
     </div>
-    <div class="projects-grid" id="projects-grid">
-      <!-- generated by JS -->
-    </div>
+    <div class="projects-grid" id="projects-grid"></div>
   </div>
 </section>
 
@@ -378,12 +142,11 @@ footer span{color:var(--c)}
 </div>
 
 <!-- CERTS -->
-<section id="certs" style="background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)">
+<section id="certs" style="background:var(--bg2)">
   <div class="section-inner">
     <div class="fade-up">
-      <div class="section-tag">// 04 · CERTIFICATES</div>
+      <div class="section-tag">Certificates</div>
       <h2 class="section-title">Credentials & IDs</h2>
-      <div class="section-line"></div>
     </div>
     <div class="certs-filters fade-up" id="certs-filters"></div>
     <div class="certs-grid fade-up" id="certs-grid"></div>
@@ -403,9 +166,8 @@ footer span{color:var(--c)}
 <section id="resume">
   <div class="section-inner">
     <div class="fade-up">
-      <div class="section-tag">// 05 · RESUME</div>
+      <div class="section-tag">Resume</div>
       <h2 class="section-title">Curriculum Vitae</h2>
-      <div class="section-line"></div>
     </div>
     <div class="resume-wrap fade-up">
       <div class="resume-card">
@@ -420,8 +182,8 @@ footer span{color:var(--c)}
           </div>
           <div style="position:relative;z-index:1;text-align:center">
             <div style="font-size:2rem;margin-bottom:.5rem">📄</div>
-            <div>PONMUDI M R</div>
-            <div style="color:var(--c);margin-top:.25rem">B.E. ECE · 2022–2026</div>
+            <div>Ponmudi M R</div>
+            <div style="color:var(--accent);margin-top:.25rem">B.E. ECE · 2022–2026</div>
           </div>
         </div>
       </div>
@@ -430,13 +192,13 @@ footer span{color:var(--c)}
         <p>Two-column professional CV optimized for embedded systems, RF engineering, and defense research roles. Features TribalNet and LEO-PNT as flagship projects with full technical specifications.</p>
         <div class="resume-meta">
           <div class="meta-row"><div class="meta-dot"></div>Embedded Systems · RF · SDR Engineering</div>
-          <div class="meta-row"><div class="meta-dot" style="background:var(--c2)"></div>Defense Research — DRDO Aligned</div>
+          <div class="meta-row"><div class="meta-dot"></div>Defense Research — DRDO Aligned</div>
           <div class="meta-row"><div class="meta-dot"></div>IEEE Member · BIT-IECC · AViNYA</div>
-          <div class="meta-row"><div class="meta-dot" style="background:var(--c2)"></div>Updated: 2026</div>
+          <div class="meta-row"><div class="meta-dot"></div>Updated: 2026</div>
         </div>
         <div style="display:flex;gap:1rem;flex-wrap:wrap">
-          <a href="#" class="btn-primary"><span>[ DOWNLOAD PDF ]</span></a>
-          <a href="https://github.com/ponmudimr" target="_blank" class="btn-secondary">[ GITHUB PROFILE ]</a>
+          <a href="assets/resume.pdf" class="btn-primary" download>Download PDF</a>
+          <a href="https://github.com/ponmudimr" target="_blank" rel="noopener" class="btn-secondary">GitHub Profile</a>
         </div>
       </div>
     </div>
@@ -444,413 +206,42 @@ footer span{color:var(--c)}
 </section>
 
 <!-- CONTACT -->
-<section id="contact" style="background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%)">
+<section id="contact" style="background:var(--bg2)">
   <div class="section-inner">
     <div class="fade-up">
-      <div class="section-tag">// 06 · CONTACT</div>
+      <div class="section-tag">Contact</div>
       <h2 class="section-title">Let's Connect</h2>
-      <div class="section-line"></div>
     </div>
     <div class="contact-grid fade-up">
-      <a href="https://linkedin.com/in/mrponmudi" target="_blank" class="contact-card">
+      <a href="https://linkedin.com/in/mrponmudi" target="_blank" rel="noopener" class="contact-card">
         <div class="contact-icon">💼</div>
-        <div><div class="contact-label">LINKEDIN</div><div class="contact-value">mrponmudi</div></div>
+        <div><div class="contact-label">LinkedIn</div><div class="contact-value">mrponmudi</div></div>
       </a>
-      <a href="https://github.com/ponmudimr" target="_blank" class="contact-card">
+      <a href="https://github.com/ponmudimr" target="_blank" rel="noopener" class="contact-card">
         <div class="contact-icon">🐙</div>
-        <div><div class="contact-label">GITHUB</div><div class="contact-value">ponmudimr</div></div>
+        <div><div class="contact-label">GitHub</div><div class="contact-value">ponmudimr</div></div>
       </a>
-      <a href="mailto:ponmudi@example.com" class="contact-card">
+      <a href="mailto:mrponmudi747@gmail.com" class="contact-card">
         <div class="contact-icon">📡</div>
-        <div><div class="contact-label">EMAIL</div><div class="contact-value">ponmudi@example.com</div></div>
+        <div><div class="contact-label">Email</div><div class="contact-value">mrponmudi747@gmail.com</div></div>
       </a>
       <a href="#" class="contact-card">
         <div class="contact-icon">📸</div>
-        <div><div class="contact-label">INSTAGRAM</div><div class="contact-value">@ponmudi_mr</div></div>
+        <div><div class="contact-label">Instagram</div><div class="contact-value">@ponmudi_mr</div></div>
       </a>
     </div>
     <div class="contact-cta fade-up">
       <p>Open to research internships, defense tech collaborations, and embedded systems projects.</p>
-      <a href="mailto:ponmudi@example.com" class="btn-primary"><span>[ SEND MESSAGE ]</span></a>
+      <a href="mailto:mrponmudi747@gmail.com" class="btn-primary">Send Message</a>
     </div>
   </div>
 </section>
 
 <footer>
-  <div>PONMUDI M R &nbsp;·&nbsp; B.E. ECE 2022–2026 &nbsp;·&nbsp; <span>Bannari Amman Institute of Technology</span></div>
-  <div style="margin-top:.5rem;color:var(--text3)">Built with purpose &nbsp;·&nbsp; Team <span>404</span></div>
+  <div>Ponmudi M R &nbsp;·&nbsp; B.E. ECE 2022–2026 &nbsp;·&nbsp; <span>Bannari Amman Institute of Technology</span></div>
+  <div style="margin-top:.5rem">Built with purpose &nbsp;·&nbsp; Team <span>404</span></div>
 </footer>
 
-<script>
-// ── DATA ─────────────────────────────────────────────────────────────────────
-const SKILLS=[
-  {icon:'⚙️',name:'C Programming',level:.9},
-  {icon:'🤖',name:'Arduino',level:.88},
-  {icon:'📟',name:'ESP32',level:.85},
-  {icon:'🐧',name:'Linux',level:.8},
-  {icon:'🔌',name:'Embedded Systems',level:.87},
-  {icon:'🌐',name:'IoT',level:.82},
-  {icon:'📡',name:'RF & SDR',level:.75},
-  {icon:'🚁',name:'Drone Technology',level:.7},
-  {icon:'💻',name:'Frontend Design',level:.72},
-  {icon:'🐙',name:'Git & GitHub',level:.85},
-];
-
-const PROJECTS=[
-  {
-    id:'A',
-    num:'PROJECT // 01',
-    title:'Autonomous Search & Intimation Drone for Navy and Army',
-    tags:['Drone','Embedded','Defense','RF','Autonomous'],
-    desc:'A fully autonomous UAV system designed for naval and army search-and-rescue operations in GPS-denied environments. The drone leverages SDR-based navigation, onboard computer vision, and encrypted RF uplink for real-time situational awareness.',
-    tech:['ESP32','RTL-SDR V4','Raspberry Pi','OpenCV','LoRa 433MHz','LiPo Power System','Custom PCB'],
-    features:[
-      'GPS-independent navigation using opportunistic LEO signals',
-      'Real-time video feed with onboard compression',
-      'Encrypted RF data link with 10km LOS range',
-      'Automated return-to-base on low battery',
-      'Thermal imaging module integration-ready',
-    ],
-    challenges:'Achieving stable autonomous flight in RF-contested environments while keeping the BOM under ₹20,000 was the primary challenge. Signal spoofing mitigation required custom FHSS firmware.',
-    future:'Swarm coordination protocol, AI-based target recognition, miniaturization for man-portable kit.',
-  },
-  {
-    id:'B',
-    num:'PROJECT // 02',
-    title:'Powerloom Fabric Length Measurement Sensor System',
-    tags:['IoT','Sensors','Industrial','ESP32','BLE'],
-    desc:'An industry-deployed sensor system for real-time fabric length measurement on powerloom machines at Kumarapalayam, Namakkal. Replaces manual counting with a low-cost, highly accurate optical encoder + MCU solution.',
-    tech:['ESP32','Optical Encoder','BLE','Node-RED','OLED Display','3D Printed Housing','12V Industrial Power'],
-    features:[
-      'Real-time fabric length display on OLED',
-      'BLE data sync to supervisor smartphone',
-      'Batch counter with auto-reset',
-      'Tamper-alert mechanism',
-      'Low power standby mode',
-    ],
-    challenges:'Vibration noise from the loom mechanism affected encoder readings. Implemented debounce filtering and differential signal conditioning to achieve ±2cm accuracy over 100m fabric runs.',
-    future:'Cloud dashboard for factory-wide monitoring, predictive maintenance alerts, integration with ERP.',
-  },
-  {
-    id:'C',
-    num:'PROJECT // 03',
-    title:'Universal Bluetooth Keyboard Adapter',
-    tags:['BLE','HID','Arduino','Firmware','Accessibility'],
-    desc:'A hardware adapter that converts any legacy PS/2 or USB wired keyboard into a modern Bluetooth HID device. Enables use of classic mechanical keyboards with tablets and smartphones without a physical connection.',
-    tech:['Arduino Pro Micro','HC-05 BLE Module','PS/2 Protocol','HID Firmware','Custom PCB','3D Printed Enclosure'],
-    features:[
-      'Supports PS/2 and USB keyboard protocols',
-      'Multi-device pairing (up to 3 devices)',
-      'Hardware encryption for BT link',
-      'LED status indicator matrix',
-      'Rechargeable 500mAh Li-Po battery',
-    ],
-    challenges:'PS/2 timing is extremely strict at the microsecond level. Bit-banging the protocol on Arduino while simultaneously managing BLE stack required careful interrupt priority management.',
-    future:'USB HID host support, OTA firmware updates, companion mobile app for macro programming.',
-  },
-  {
-    id:'D',
-    num:'PROJECT // 04',
-    title:'Linux Automation Projects',
-    tags:['Linux','Bash','Python','Networking','Server'],
-    desc:'A collection of automation tools and scripts built on Linux for home server management, EZVIZ camera routing via Tailscale, photo backup workflows with FreeFileSync, and radio signal processing pipelines for SDR work.',
-    tech:['Linux Mint','Bash','Python','Tailscale','FreeFileSync','Tonfotos','SatDump','JAERO'],
-    features:[
-      'EZVIZ NVR auto-mount & stream routing via Tailscale VPN',
-      'Cron-based photo sync from NAS to cloud-backup',
-      'Automated SDR pipeline: receive → decode → archive',
-      'System health dashboard with alerting',
-      'Headless server management scripts',
-    ],
-    challenges:'Tailscale subnet routing with multiple NICs caused hairpin NAT issues. Resolved by configuring IP masquerade rules and custom exit nodes.',
-    future:'Docker containerization of all services, Grafana monitoring dashboard, automated ACARS/ADS-B logging system.',
-  },
-  {
-    id:'E',
-    num:'PROJECT // 05',
-    title:'Smart Embedded Systems — TribalNet & LEO-PNT',
-    tags:['LoRa','LEO','SDR','ESP32','Navigation','Defense'],
-    desc:'Two flagship smart embedded systems: (1) TribalNet — a 10km LoRa mesh network for off-grid tribal communication at ₹1,500/node, winner of NHIDE 2026 (₹50,000). (2) Cognitive Opportunistic LEO-PNT Receiver — an SDR system exploiting LEO satellite signals for GPS-denied navigation, submitted for defense innovation challenge.',
-    tech:['ESP32 WROOM-32E','SX1278 LoRa 433MHz','MAX7219 LED','RTL-SDR V4','Raspberry Pi 5','ICM-42688 IMU','SatDump v1.2.2'],
-    features:[
-      'TribalNet: 10km LOS range, RSSI –54 dBm, mesh topology',
-      'TribalNet: ₹1,500/node BOM — NHIDE 2026 1st Prize',
-      'LEO-PNT: Orbcomm / Iridium opportunistic positioning',
-      'LEO-PNT: IMU sensor fusion for inertial bridging',
-      'IEEE YESIST12 National Finalist (ID: 3280)',
-    ],
-    challenges:'For TribalNet: achieving reliable mesh routing under dense forest canopy at 433 MHz required adaptive power control. For LEO-PNT: Doppler shift correction on Orbcomm bursts at 137 MHz demanded real-time DSP tuning.',
-    future:'TribalNet: SOS beacon mode, solar-powered nodes. LEO-PNT: patent filing (IPC G01S19/00), integration with military PNT standards.',
-  },
-];
-
-const CERTS=[
-  {title:'IEEE YESIST12 National Finalist',by:'IEEE — Hardware/IoT Track',year:'2026',cat:'Award',id:'ID: 3280 · TribalNet'},
-  {title:'NHIDE 2026 — 1st Prize',by:'National Hardware Innovation & Design Expo',year:'2026',cat:'Award',id:'₹50,000 · Team 404'},
-  {title:'VishwaNova 2026 Finalist',by:'MIT-WPU Pune',year:'2026',cat:'Competition',id:'Team 404 / TribalNet'},
-  {title:'YUKTHI Idea/PoC Submission',by:'BIT Special Lab',year:'2026',cat:'Academic',id:'PS Portal Submission'},
-  {title:'GP Challenge BPI Industry Visit',by:'Powerloom, Kumarapalayam',year:'2026',cat:'Academic',id:'Geotagged Report'},
-  {title:'IEEE Membership',by:'Institute of Electrical and Electronics Engineers',year:'2024',cat:'Membership',id:'BIT-IECC Chapter'},
-  {title:'BIT-IECC Active Member',by:'BIT IEEE Student Chapter',year:'2024',cat:'Membership',id:'ECE Dept.'},
-  {title:'AViNYA Club Member',by:'Bannari Amman Institute of Technology',year:'2023',cat:'Club',id:'Technical Club'},
-];
-
-// ── CANVAS BACKGROUND ─────────────────────────────────────────────────────────
-const canvas=document.getElementById('bg-canvas');
-const ctx=canvas.getContext('2d');
-let W,H,particles=[],gridLines=[];
-function resizeCanvas(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;initGrid()}
-function initGrid(){
-  gridLines=[];
-  const spacing=60;
-  for(let x=0;x<W;x+=spacing)gridLines.push({type:'v',x});
-  for(let y=0;y<H;y+=spacing)gridLines.push({type:'h',y});
-  particles=Array.from({length:60},()=>({
-    x:Math.random()*W,y:Math.random()*H,
-    vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,
-    r:Math.random()*1.5+.5,
-    a:Math.random(),life:Math.random()
-  }));
-}
-function drawBg(){
-  ctx.clearRect(0,0,W,H);
-  const isDark=!document.body.classList.contains('light-mode');
-  const gridColor=isDark?'rgba(0,245,255,0.04)':'rgba(0,80,200,0.06)';
-  const dotColor=isDark?'rgba(0,245,255,0.5)':'rgba(0,80,200,0.4)';
-  ctx.strokeStyle=gridColor;ctx.lineWidth=.5;
-  gridLines.forEach(l=>{
-    ctx.beginPath();
-    if(l.type==='v'){ctx.moveTo(l.x,0);ctx.lineTo(l.x,H)}
-    else{ctx.moveTo(0,l.y);ctx.lineTo(W,l.y)}
-    ctx.stroke();
-  });
-  particles.forEach(p=>{
-    p.x+=p.vx;p.y+=p.vy;p.life+=.005;
-    if(p.x<0||p.x>W)p.vx*=-1;
-    if(p.y<0||p.y>H)p.vy*=-1;
-    const a=Math.sin(p.life*Math.PI)*.7;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle=isDark?`rgba(0,245,255,${a})`:`rgba(0,80,200,${a*.5})`;
-    ctx.fill();
-  });
-  // draw connection lines between nearby particles
-  for(let i=0;i<particles.length;i++){
-    for(let j=i+1;j<particles.length;j++){
-      const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y;
-      const dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<100){
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x,particles[i].y);
-        ctx.lineTo(particles[j].x,particles[j].y);
-        const a=(1-dist/100)*(isDark?.15:.08);
-        ctx.strokeStyle=isDark?`rgba(0,245,255,${a})`:`rgba(0,80,200,${a})`;
-        ctx.lineWidth=.5;ctx.stroke();
-      }
-    }
-  }
-  requestAnimationFrame(drawBg);
-}
-window.addEventListener('resize',resizeCanvas);
-resizeCanvas();drawBg();
-
-// ── CURSOR ─────────────────────────────────────────────────────────────────────
-const cursor=document.getElementById('cursor');
-const cursorRing=document.getElementById('cursor-ring');
-let mx=0,my=0;
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX;my=e.clientY;
-  cursor.style.left=mx+'px';cursor.style.top=my+'px';
-  cursorRing.style.left=mx+'px';cursorRing.style.top=my+'px';
-});
-document.querySelectorAll('a,button,.project-card,.cert-card').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{
-    cursorRing.style.width='54px';cursorRing.style.height='54px';
-    cursorRing.style.borderColor='var(--c2)';
-  });
-  el.addEventListener('mouseleave',()=>{
-    cursorRing.style.width='36px';cursorRing.style.height='36px';
-    cursorRing.style.borderColor='var(--c)';
-  });
-});
-
-// ── LOADER ─────────────────────────────────────────────────────────────────────
-const pctEl=document.getElementById('pct');
-let pct=0;
-const pctInterval=setInterval(()=>{
-  pct+=Math.floor(Math.random()*8)+3;
-  if(pct>=100){pct=100;clearInterval(pctInterval);
-    setTimeout(()=>{document.getElementById('loader').classList.add('hide')},400);
-  }
-  pctEl.textContent=pct+'%';
-},80);
-
-// ── TYPING ANIMATION ───────────────────────────────────────────────────────────
-const typedEl=document.getElementById('typed');
-const lines=['ECE Student','Embedded Systems Developer','Defense Tech Innovator','RF & SDR Engineer','Team 404 Lead'];
-let lineIdx=0,charIdx=0,deleting=false;
-function type(){
-  const line=lines[lineIdx];
-  typedEl.textContent=deleting?line.substring(0,charIdx-1):line.substring(0,charIdx+1);
-  deleting?charIdx--:charIdx++;
-  if(!deleting&&charIdx===line.length){setTimeout(()=>{deleting=true;setTimeout(type,80)},1800);return}
-  if(deleting&&charIdx===0){deleting=false;lineIdx=(lineIdx+1)%lines.length}
-  setTimeout(type,deleting?50:80);
-}
-setTimeout(type,2500);
-
-// ── THEME TOGGLE ───────────────────────────────────────────────────────────────
-const themeBtn=document.getElementById('theme-btn');
-themeBtn.addEventListener('click',()=>{
-  document.body.classList.toggle('light-mode');
-  themeBtn.textContent=document.body.classList.contains('light-mode')?'🌙':'☀';
-});
-
-// ── HAMBURGER ──────────────────────────────────────────────────────────────────
-const hamburger=document.getElementById('hamburger');
-const navLinks=document.getElementById('nav-links');
-hamburger.addEventListener('click',()=>navLinks.classList.toggle('open'));
-function closeMenu(){navLinks.classList.remove('open')}
-
-// ── SKILLS ─────────────────────────────────────────────────────────────────────
-const skillsGrid=document.getElementById('skills-grid');
-SKILLS.forEach(s=>{
-  skillsGrid.innerHTML+=`
-  <div class="skill-card">
-    <span class="skill-icon">${s.icon}</span>
-    <div class="skill-name">${s.name}</div>
-    <div class="skill-level"><div class="skill-fill" style="transform:scaleX(${s.level})"></div></div>
-  </div>`;
-});
-
-// ── PROJECTS ──────────────────────────────────────────────────────────────────
-const projGrid=document.getElementById('projects-grid');
-PROJECTS.forEach(p=>{
-  projGrid.innerHTML+=`
-  <div class="project-card" onclick="openProject('${p.id}')">
-    <div class="project-num">${p.num}</div>
-    <div class="project-title">${p.title}</div>
-    <div class="project-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-    <div class="project-arrow">EXPLORE <span style="font-size:1rem">→</span></div>
-  </div>`;
-});
-
-// ── PROJECT MODAL ──────────────────────────────────────────────────────────────
-const overlay=document.getElementById('modal-overlay');
-const modalContent=document.getElementById('modal-content');
-document.getElementById('modal-close').addEventListener('click',closeModal);
-overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
-
-function openProject(id){
-  const p=PROJECTS.find(x=>x.id===id);
-  if(!p)return;
-  modalContent.innerHTML=`
-    <div class="modal-num">${p.num}</div>
-    <div class="modal-title">${p.title}</div>
-    <div class="modal-image-placeholder">[ PROJECT GALLERY — Upload images here ]</div>
-    <div class="modal-section">
-      <h4>// DESCRIPTION</h4>
-      <p>${p.desc}</p>
-    </div>
-    <div class="modal-section">
-      <h4>// TECHNOLOGIES</h4>
-      <div class="modal-tags">${p.tech.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-    </div>
-    <div class="modal-section">
-      <h4>// KEY FEATURES</h4>
-      <ul>${p.features.map(f=>`<li>${f}</li>`).join('')}</ul>
-    </div>
-    <div class="modal-section">
-      <h4>// CHALLENGES</h4>
-      <p>${p.challenges}</p>
-    </div>
-    <div class="modal-section">
-      <h4>// FUTURE IMPROVEMENTS</h4>
-      <p>${p.future}</p>
-    </div>
-    <div class="modal-btn-row">
-      <a href="https://github.com/ponmudimr" target="_blank" class="btn-primary"><span>[ GITHUB ]</span></a>
-      <a href="#" class="btn-secondary">[ LIVE DEMO ]</a>
-    </div>
-  `;
-  overlay.classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeModal(){
-  overlay.classList.remove('open');
-  document.body.style.overflow='';
-}
-
-// ── CERTIFICATES ───────────────────────────────────────────────────────────────
-const filtersEl=document.getElementById('certs-filters');
-const certsGridEl=document.getElementById('certs-grid');
-const cats=['All',...new Set(CERTS.map(c=>c.cat))];
-let activeFilter='All';
-
-cats.forEach(cat=>{
-  const btn=document.createElement('button');
-  btn.className='filter-btn'+(cat==='All'?' active':'');
-  btn.textContent=cat;
-  btn.addEventListener('click',()=>{
-    activeFilter=cat;
-    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    renderCerts();
-  });
-  filtersEl.appendChild(btn);
-});
-
-function renderCerts(){
-  const filtered=activeFilter==='All'?CERTS:CERTS.filter(c=>c.cat===activeFilter);
-  certsGridEl.innerHTML=filtered.map(c=>`
-    <div class="cert-card" onclick="openCert('${c.title.replace(/'/g,"\\'")}')">
-      <div class="cert-badge">${c.cat.toUpperCase()}</div>
-      <div class="cert-title">${c.title}</div>
-      <div class="cert-by">${c.by}</div>
-      <div style="margin-top:.5rem;font-family:var(--font-mono);font-size:.65rem;color:var(--c);">${c.id}</div>
-      <div class="cert-year">${c.year}</div>
-    </div>
-  `).join('');
-}
-renderCerts();
-
-const certModal=document.getElementById('cert-modal');
-document.getElementById('cert-close').addEventListener('click',()=>{certModal.classList.remove('open')});
-certModal.addEventListener('click',e=>{if(e.target===certModal)certModal.classList.remove('open')});
-
-function openCert(title){
-  const c=CERTS.find(x=>x.title===title);
-  if(!c)return;
-  document.getElementById('cert-large-content').innerHTML=`
-    <div style="text-align:center">
-      <div style="font-size:3rem;margin-bottom:1rem">🏆</div>
-      <div style="font-family:var(--font-head);font-size:1rem;color:var(--c);margin-bottom:.5rem">${c.cat.toUpperCase()}</div>
-      <div style="font-size:1.1rem;font-weight:600;color:var(--text)">${c.title}</div>
-    </div>`;
-  document.getElementById('cert-modal-text').innerHTML=`
-    <p style="font-size:.9rem;color:var(--text2);margin-bottom:.5rem">${c.by}</p>
-    <p style="font-family:var(--font-mono);font-size:.75rem;color:var(--c)">${c.id}</p>
-    <p style="font-family:var(--font-mono);font-size:.7rem;color:var(--text3);margin-top:.25rem">${c.year}</p>`;
-  certModal.classList.add('open');
-}
-
-// ── SCROLL REVEAL ──────────────────────────────────────────────────────────────
-const fadeEls=document.querySelectorAll('.fade-up');
-const fadeObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.classList.add('visible');
-      fadeObs.unobserve(e.target);
-    }
-  });
-},{threshold:.1});
-fadeEls.forEach(el=>fadeObs.observe(el));
-
-// skill level bar observer
-const skillObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
-},{threshold:.2});
-document.querySelectorAll('.skill-card').forEach(el=>skillObs.observe(el));
-</script>
+<script src="js/main.js"></script>
 </body>
 </html>

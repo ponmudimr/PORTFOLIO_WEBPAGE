@@ -104,7 +104,7 @@ const CERTS=[
   {title:'VishwaNova 2026 Finalist',by:'MIT-WPU Pune',year:'2026',cat:'Competition',id:'Team 404 / TribalNet'},
   {title:'YUKTHI Idea/PoC Submission',by:'BIT Special Lab',year:'2026',cat:'Academic',id:'PS Portal Submission'},
   {title:'GP Challenge BPI Industry Visit',by:'Powerloom, Kumarapalayam',year:'2026',cat:'Academic',id:'Geotagged Report'},
-  {title:'IEEE Membership',by:'Institute of Electrical and Electronics Engineers',year:'2024',cat:'Membership',id:'BIT-IECC Chapter'},
+  {title:'IEEE Membership',by:'Institute of Electrical and Electronics Engineers',year:'2024',cat:'Membership',id:'BIT-IECC Chapter',img:'assets/ieee-membership.jpg'},
   {title:'BIT-IECC Active Member',by:'BIT IEEE Student Chapter',year:'2024',cat:'Membership',id:'ECE Dept.'},
   {title:'AViNYA Club Member',by:'Bannari Amman Institute of Technology',year:'2023',cat:'Club',id:'Technical Club'},
 ];
@@ -253,8 +253,9 @@ certModal.addEventListener('click',e=>{if(e.target===certModal)certModal.classLi
 function openCert(idx){
   const c=CERTS[idx];
   if(!c)return;
-  document.getElementById('cert-large-content').innerHTML=`
-    <div style="text-align:center">
+  document.getElementById('cert-large-content').innerHTML=c.img?
+    `<img src="${c.img}" alt="${c.title}" style="max-width:100%;max-height:100%;border-radius:12px;object-fit:contain">`:
+    `<div style="text-align:center">
       <div style="font-size:2.5rem;margin-bottom:1rem">🏆</div>
       <div style="font-size:.85rem;color:var(--accent);margin-bottom:.5rem;font-weight:600">${c.cat}</div>
       <div style="font-size:1.1rem;font-weight:600;color:var(--text)">${c.title}</div>

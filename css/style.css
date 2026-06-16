@@ -61,6 +61,26 @@ nav{
   text-align:center;padding:8rem 1.5rem 4rem;background:linear-gradient(180deg,var(--bg3) 0%,var(--bg) 100%);
 }
 .hero-inner{max-width:800px;animation:fadeUp 1s ease .1s both}
+.hero-photo-wrap{
+  position:relative;width:168px;height:168px;margin:0 auto 1.75rem;
+  display:flex;align-items:center;justify-content:center;
+}
+.hero-photo-ring{
+  position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 0deg,var(--accent),#7b2fff,#0071e3,var(--accent));
+  animation:spinRing 8s linear infinite;
+  filter:blur(1px);
+}
+.hero-photo-ring::after{
+  content:'';position:absolute;inset:4px;border-radius:50%;background:var(--bg3);
+}
+.hero-photo{
+  position:relative;width:152px;height:152px;border-radius:50%;object-fit:cover;
+  z-index:1;box-shadow:0 8px 30px rgba(0,0,0,.12);
+  mask-image:radial-gradient(circle,black 92%,transparent 100%);
+  -webkit-mask-image:radial-gradient(circle,black 92%,transparent 100%);
+}
+@keyframes spinRing{to{transform:rotate(360deg)}}
 .hero-badge{
   display:inline-block;font-size:.8rem;color:var(--accent);font-weight:600;
   letter-spacing:.02em;margin-bottom:1.5rem;

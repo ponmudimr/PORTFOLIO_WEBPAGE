@@ -62,23 +62,21 @@ nav{
 }
 .hero-inner{max-width:800px;animation:fadeUp 1s ease .1s both}
 .hero-photo-wrap{
-  position:relative;width:168px;height:168px;margin:0 auto 1.75rem;
+  position:relative;width:104px;height:104px;margin:0 auto 1.5rem;
   display:flex;align-items:center;justify-content:center;
 }
 .hero-photo-ring{
   position:absolute;inset:0;border-radius:50%;
   background:conic-gradient(from 0deg,var(--accent),#7b2fff,#0071e3,var(--accent));
   animation:spinRing 8s linear infinite;
-  filter:blur(1px);
 }
 .hero-photo-ring::after{
-  content:'';position:absolute;inset:4px;border-radius:50%;background:var(--bg3);
+  content:'';position:absolute;inset:3px;border-radius:50%;background:var(--bg3);
 }
 .hero-photo{
-  position:relative;width:152px;height:152px;border-radius:50%;object-fit:cover;
-  z-index:1;box-shadow:0 8px 30px rgba(0,0,0,.12);
-  mask-image:radial-gradient(circle,black 92%,transparent 100%);
-  -webkit-mask-image:radial-gradient(circle,black 92%,transparent 100%);
+  position:relative;width:92px;height:92px;border-radius:50%;
+  object-fit:cover;object-position:center 18%;
+  z-index:1;box-shadow:0 4px 16px rgba(0,0,0,.12);
 }
 @keyframes spinRing{to{transform:rotate(360deg)}}
 .hero-badge{

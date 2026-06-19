@@ -198,6 +198,9 @@ section{padding:6rem 1.5rem}
   width:100%;height:200px;background:var(--bg2);border-radius:16px;display:flex;align-items:center;
   justify-content:center;font-size:.85rem;color:var(--text3);margin-bottom:1.5rem;
 }
+.modal-project-img{
+  width:100%;max-height:320px;object-fit:cover;border-radius:16px;margin-bottom:1.5rem;display:block;
+}
 
 /* CERTS */
 .certs-filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:2rem}

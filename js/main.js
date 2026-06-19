@@ -85,6 +85,7 @@ const PROJECTS=[
     id:'E',
     num:'PROJECT 05',
     title:'Smart Embedded Systems — TribalNet & LEO-PNT',
+    img:'assets/nhidepresentation.JPG',
     tags:['LoRa','LEO','SDR','ESP32','Navigation','Defense'],
     desc:'Two flagship smart embedded systems: (1) TribalNet — a 10km LoRa mesh network for off-grid tribal communication at ₹1,500/node, winner of NHIDE 2026 (₹50,000). (2) Cognitive Opportunistic LEO-PNT Receiver — an SDR system exploiting LEO satellite signals for GPS-denied navigation, submitted for defense innovation challenge.',
     tech:['ESP32 WROOM-32E','SX1278 LoRa 433MHz','MAX7219 LED','RTL-SDR V4','Raspberry Pi 5','ICM-42688 IMU','SatDump v1.2.2'],
@@ -179,7 +180,7 @@ function openProject(id){
   modalContent.innerHTML=`
     <div class="modal-num">${p.num}</div>
     <div class="modal-title">${p.title}</div>
-    <div class="modal-image-placeholder">Project gallery — image coming soon</div>
+    ${p.img?`<img src="${p.img}" alt="${p.title}" class="modal-project-img">`:''}
     <div class="modal-section">
       <h4>Description</h4>
       <p>${p.desc}</p>

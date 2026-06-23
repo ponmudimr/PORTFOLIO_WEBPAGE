@@ -277,3 +277,199 @@ footer span{color:var(--text)}
   .certs-grid{grid-template-columns:1fr}
   .contact-grid{grid-template-columns:1fr}
 }
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   IMMERSIVE WORLD MODE
+   Activated by js/world.js adding .immersive (+ .immersive-3d or
+   .immersive-fallback) to <body>. Without JS, none of this shows and the
+   original responsive 2D site renders untouched.
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Hidden by default — only revealed once JS confirms the mode */
+#world-root,#world-aurora,#world-hud,#journey-rail{display:none}
+#world-loader{display:none}
+body.immersive-3d #world-root,
+body.immersive-3d #world-hud,
+body.immersive-3d #world-loader{display:block}
+body.immersive-3d #world-loader{display:flex}
+body.immersive-fallback #world-aurora{display:block}
+body.immersive #journey-rail{display:flex}
+
+/* The WebGL canvas sits fixed behind everything */
+#world-root{position:fixed;inset:0;z-index:0;pointer-events:none}
+#world-canvas{width:100%;height:100%;display:block}
+
+/* Lift real content above the world layer */
+body.immersive > nav,
+body.immersive > section,
+body.immersive > footer{position:relative;z-index:1}
+
+/* ── Palette: turn existing panels into dark glass, text into light ── */
+body.immersive{
+  --bg:transparent;
+  --bg2:rgba(16,20,38,.46);
+  --bg3:rgba(26,32,56,.55);
+  --text:#eef2ff;--text2:#aab4d8;--text3:#7e89b3;
+  --border:rgba(130,150,230,.22);
+  --accent:#5bd6ff;--accent-hover:#8fe4ff;
+  --zone-accent:#5bd6ff;
+  background:#070a18;color:var(--text);
+}
+body.immersive #hero{background:transparent}
+
+/* Frost the glass panels for depth over the 3D world */
+body.immersive .profile-card,
+body.immersive .skill-card,
+body.immersive .project-card,
+body.immersive .cert-card,
+body.immersive .contact-card,
+body.immersive .resume-card,
+body.immersive .stat-item,
+body.immersive .modal-box,
+body.immersive .cert-modal-inner{
+  backdrop-filter:saturate(140%) blur(14px);
+  -webkit-backdrop-filter:saturate(140%) blur(14px);
+  border:1px solid var(--border);
+  box-shadow:0 8px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.05);
+}
+body.immersive .project-card:hover,
+body.immersive .skill-card:hover,
+body.immersive .contact-card:hover{
+  border-color:var(--zone-accent);
+  box-shadow:0 12px 50px rgba(0,0,0,.5),0 0 30px -8px var(--zone-accent);
+  background:rgba(30,38,66,.6);
+}
+
+/* Glass nav over the world */
+body.immersive nav{
+  background:rgba(8,11,24,.55)!important;
+  backdrop-filter:saturate(160%) blur(18px);
+  border-bottom:1px solid var(--border);
+}
+
+/* ── Oversized cinematic typography integrated into the landscape ── */
+body.immersive .hero-name{
+  font-size:clamp(3rem,11vw,8rem);letter-spacing:-.04em;
+  background:linear-gradient(180deg,#ffffff 0%,#a9c2ff 70%,#5bd6ff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 60px rgba(91,214,255,.25);
+}
+body.immersive .section-title{
+  font-size:clamp(2.2rem,6vw,4rem);letter-spacing:-.03em;
+  text-shadow:0 0 40px rgba(0,0,0,.6);
+}
+body.immersive .section-tag{
+  color:var(--zone-accent);text-transform:uppercase;letter-spacing:.25em;font-size:.75rem;
+}
+body.immersive .hero-badge{
+  background:rgba(91,214,255,.1);border:1px solid var(--border);
+  padding:.4rem 1rem;border-radius:980px;backdrop-filter:blur(10px);
+}
+
+/* Giant ghost watermark word anchoring each zone into the scenery */
+.ghost-word{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:clamp(5rem,20vw,16rem);font-weight:800;letter-spacing:-.04em;
+  color:rgba(150,170,255,.05);white-space:nowrap;pointer-events:none;
+  z-index:0;user-select:none;text-transform:uppercase;
+}
+body.immersive .section-inner{position:relative;z-index:1}
+
+/* ── HUD: current zone readout ── */
+#world-hud{
+  position:fixed;left:1.5rem;bottom:1.5rem;z-index:40;pointer-events:none;
+  font-family:var(--font);
+}
+.hud-bracket{width:34px;height:34px;border-left:2px solid var(--zone-accent);
+  border-top:2px solid var(--zone-accent);margin-bottom:.5rem;opacity:.7}
+#zone-name{
+  font-size:1.6rem;font-weight:800;letter-spacing:.08em;color:#eef2ff;
+  text-shadow:0 0 24px var(--zone-accent);transition:color .6s;
+}
+.hud-meta{font-size:.62rem;letter-spacing:.3em;color:var(--text3);margin-top:.35rem}
+
+/* ── Journey rail: zone navigation on the right edge ── */
+#journey-rail{
+  position:fixed;right:1.4rem;top:50%;transform:translateY(-50%);z-index:50;
+  flex-direction:column;gap:1.1rem;align-items:flex-end;
+}
+#journey-rail a{display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--text3);
+  font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;transition:color .3s}
+#journey-rail a em{font-style:normal;opacity:0;transform:translateX(6px);transition:.3s}
+#journey-rail a span{
+  width:9px;height:9px;border-radius:50%;border:1.5px solid var(--text3);
+  background:transparent;transition:.3s;flex-shrink:0;
+}
+#journey-rail a:hover em{opacity:1;transform:translateX(0)}
+#journey-rail a:hover span{border-color:var(--accent)}
+#journey-rail a.active{color:#fff}
+#journey-rail a.active em{opacity:1;transform:translateX(0)}
+#journey-rail a.active span{
+  background:var(--zone-accent);border-color:var(--zone-accent);
+  box-shadow:0 0 14px var(--zone-accent);transform:scale(1.25);
+}
+
+/* ── Loader ── */
+#world-loader{
+  position:fixed;inset:0;z-index:5000;flex-direction:column;align-items:center;
+  justify-content:center;gap:1.2rem;background:radial-gradient(circle at 50% 50%,#0d1230,#05060f);
+  transition:opacity .8s ease;
+}
+#world-loader.hidden{opacity:0;pointer-events:none}
+.loader-core{
+  width:60px;height:60px;border-radius:50%;
+  background:radial-gradient(circle,#5bd6ff,#8a6bff);
+  box-shadow:0 0 50px #5bd6ff,0 0 100px #8a6bff;
+  animation:pulseCore 1.6s ease-in-out infinite;
+}
+@keyframes pulseCore{0%,100%{transform:scale(.8);opacity:.7}50%{transform:scale(1.15);opacity:1}}
+.loader-text{font-size:1.1rem;font-weight:700;letter-spacing:.18em;color:#eef2ff;text-transform:uppercase}
+.loader-sub{font-size:.72rem;letter-spacing:.2em;color:#7e89b3;animation:blinkSub 1.4s ease-in-out infinite}
+@keyframes blinkSub{50%{opacity:.4}}
+
+/* ── Fallback animated aurora world (mobile / low-end / reduced-motion) ── */
+#world-aurora{
+  position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:radial-gradient(ellipse at 50% 120%,#1a1140 0%,#0a0a1f 55%,#05060f 100%);
+}
+#world-aurora span{
+  position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;
+  transform:translate(var(--aurora-x,0),var(--aurora-y,0));
+  transition:transform .6s ease-out;mix-blend-mode:screen;
+}
+#world-aurora span:nth-child(1){width:60vw;height:60vw;left:-10vw;top:-10vw;
+  background:radial-gradient(circle,#5bd6ff,transparent 70%);animation:drift1 14s ease-in-out infinite alternate}
+#world-aurora span:nth-child(2){width:55vw;height:55vw;right:-15vw;top:20vh;
+  background:radial-gradient(circle,#8a6bff,transparent 70%);animation:drift2 18s ease-in-out infinite alternate}
+#world-aurora span:nth-child(3){width:50vw;height:50vw;left:20vw;bottom:-20vh;
+  background:radial-gradient(circle,#ff4fa3,transparent 70%);animation:drift3 16s ease-in-out infinite alternate}
+@keyframes drift1{to{transform:translate(12vw,16vh) scale(1.2)}}
+@keyframes drift2{to{transform:translate(-14vw,-10vh) scale(1.1)}}
+@keyframes drift3{to{transform:translate(10vw,-14vh) scale(1.25)}}
+
+/* Twinkling starfield for the fallback, drawn purely in CSS */
+body.immersive-fallback #world-aurora::after{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(1.5px 1.5px at 20% 30%,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 70% 60%,#cfe0ff,transparent),
+    radial-gradient(1px 1px at 40% 80%,#fff,transparent),
+    radial-gradient(1px 1px at 85% 20%,#cfe0ff,transparent),
+    radial-gradient(1.5px 1.5px at 55% 45%,#fff,transparent);
+  background-size:300px 300px;opacity:.6;animation:twinkle 6s ease-in-out infinite}
+@keyframes twinkle{50%{opacity:.25}}
+
+/* ── Accessibility: honour reduced-motion (static, calm world) ── */
+@media(prefers-reduced-motion:reduce){
+  #world-aurora span,#world-aurora::after,.loader-core,.loader-sub,
+  .hero-photo-ring,.scroll-indicator{animation:none!important}
+  *{scroll-behavior:auto!important}
+}
+
+/* ── Responsive tweaks for immersive chrome ── */
+@media(max-width:768px){
+  #journey-rail{right:.7rem;gap:.8rem}
+  #journey-rail a em{display:none}
+  #world-hud{left:1rem;bottom:1rem}
+  #zone-name{font-size:1.2rem}
+  .ghost-word{font-size:clamp(3.5rem,18vw,7rem)}
+}

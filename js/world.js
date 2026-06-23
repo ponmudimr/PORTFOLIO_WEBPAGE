@@ -77,7 +77,7 @@ function bootWorld(){
   };
   let mood = MOODS.night;
 
-  scene.fog = new THREE.FogExp2(mood.fog, 0.0019);
+  scene.fog = new THREE.FogExp2(mood.fog, 0.0012);
   scene.background = new THREE.Color(mood.sky);
 
   // Gradient sky dome (cheap volumetric-ish backdrop via vertex-position shader).
@@ -176,24 +176,26 @@ function bootWorld(){
   // ── DISTANT MOUNTAIN RIDGES (silhouette, scale & depth) ──────────────────────────
   function mountainRange(zCenter, baseColor){
     const grp = new THREE.Group();
-    const layers = [ {z:-260, h:160, w:900, c:0x141833, n:5},
-                     {z:-160, h:110, w:760, c:0x1b2147, n:6},
-                     {z:-80,  h:70,  w:620, c:0x232a5c, n:7} ];
+    // Wide height range + heavy z-scatter keeps the silhouette jagged (no straight
+    // top edge), and the band sits low so its ridgeline stays out of the eyeline.
+    const layers = [ {z:-300, h:210, w:1000, c:0x10142e, n:9},
+                     {z:-180, h:150, w:840,  c:0x161b3e, n:10},
+                     {z:-90,  h:95,  w:680,  c:0x1f2654, n:11} ];
     layers.forEach(L=>{
       for(let i=0;i<L.n;i++){
-        const h = L.h * rand(.6,1.1);
-        const geo = new THREE.ConeGeometry(L.w/L.n*rand(.7,1.1), h, 4, 1);
-        const m = new THREE.MeshStandardMaterial({ color:L.c, flatShading:true, roughness:1, metalness:0 });
+        const h = L.h * rand(.45,1.7);
+        const geo = new THREE.ConeGeometry(L.w/L.n*rand(.7,1.25), h, 5, 1);
+        const m = new THREE.MeshStandardMaterial({ color:L.c, flatShading:true, roughness:1, metalness:0, fog:true });
         const peak = new THREE.Mesh(geo,m);
         peak.rotation.y = rand(0,Math.PI);
-        peak.position.set((i-L.n/2)*(L.w/L.n) + rand(-30,30), h/2 - 40, zCenter + L.z + rand(-30,30));
+        peak.position.set((i-L.n/2)*(L.w/L.n) + rand(-40,40), h/2 - 78, zCenter + L.z + rand(-80,80));
         grp.add(peak);
       }
     });
     scene.add(grp);
     return grp;
   }
-  mountainRange(-120, 0x141833);
+  mountainRange(-150, 0x141833);
   mountainRange(-620, 0x161a3a);
 
   // ── FLOATING ISLAND (low-poly rock chunk with glowing underside) ─────────────────
@@ -290,11 +292,14 @@ function bootWorld(){
     return mesh;
   }
 
-  // ── GROUND HAZE PLANES (glowing valley floor) ───────────────────────────────────
+  // ── GROUND HAZE (soft radial glow on the valley floor) ──────────────────────────
+  // Uses the soft orb texture (not a hard-edged plane) so there is no straight
+  // edge to read as a horizontal line at the horizon.
   function valleyFloor(z, color){
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(700,700,1,1),
-      new THREE.MeshBasicMaterial({ color, transparent:true, opacity:.06, blending:THREE.AdditiveBlending, depthWrite:false }));
-    m.rotation.x = -Math.PI/2; m.position.set(0,-38,z); scene.add(m);
+    const mat = new THREE.SpriteMaterial({ map:orbTex, color, transparent:true, opacity:.5,
+      blending:THREE.AdditiveBlending, depthWrite:false });
+    const s = new THREE.Sprite(mat); s.scale.set(420,420,1); s.position.set(0,-34,z);
+    scene.add(s);
   }
 
   // ── PORTAL (contact / command center) ────────────────────────────────────────────

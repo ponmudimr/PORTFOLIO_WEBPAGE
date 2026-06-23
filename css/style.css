@@ -307,15 +307,42 @@ body.immersive > footer{position:relative;z-index:1}
 /* ── Palette: turn existing panels into dark glass, text into light ── */
 body.immersive{
   --bg:transparent;
-  --bg2:rgba(16,20,38,.46);
-  --bg3:rgba(26,32,56,.55);
-  --text:#eef2ff;--text2:#aab4d8;--text3:#7e89b3;
-  --border:rgba(130,150,230,.22);
+  --bg2:rgba(14,18,34,.6);
+  --bg3:rgba(26,32,56,.62);
+  --text:#f3f6ff;--text2:#cfd8f5;--text3:#a3afd6;
+  --border:rgba(140,160,235,.26);
   --accent:#5bd6ff;--accent-hover:#8fe4ff;
   --zone-accent:#5bd6ff;
   background:#070a18;color:var(--text);
 }
 body.immersive #hero{background:transparent}
+
+/* Frosted scrim behind plain-text blocks so copy stays readable over the world */
+body.immersive .about-bio,
+body.immersive .timeline,
+body.immersive .resume-info,
+body.immersive .contact-cta{
+  background:rgba(9,12,26,.62);
+  backdrop-filter:saturate(140%) blur(13px);
+  -webkit-backdrop-filter:saturate(140%) blur(13px);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:1.6rem 1.8rem;
+}
+body.immersive .contact-cta{text-align:center}
+/* Lift body copy contrast with a soft shadow against bright areas */
+body.immersive .about-bio,
+body.immersive .tl-content p,
+body.immersive .tl-content h4,
+body.immersive .modal-section p,
+body.immersive .modal-section li,
+body.immersive .resume-info p,
+body.immersive .contact-cta p,
+body.immersive .hero-subtitle,
+body.immersive .profile-role,
+body.immersive .cert-by{
+  text-shadow:0 1px 14px rgba(0,0,0,.75);
+}
 
 /* Frost the glass panels for depth over the 3D world */
 body.immersive .profile-card,

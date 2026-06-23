@@ -104,9 +104,7 @@ const CERTS=[
   {title:'NHIDE 2026 — 1st Prize · Solar Powered RF Communication',by:'National Hackathon for Innovation, Design & Entrepreneurship — Guru Ghasidas Vishwavidyalaya',year:'2026',cat:'Award',id:'1st Prize · CBDE Initiative',img:'assets/nhide-certificate.jpg'},
   {title:'VishwaNova 2026 — Certificate of Participation',by:'MIT World Peace University, Pune',year:'2026',cat:'Competition',id:'Team 404 Error',img:'assets/vishwanova-certificate.jpeg'},
   {title:'YUKTHI Idea/PoC Submission',by:'BIT Special Lab',year:'2026',cat:'Academic',id:'PS Portal Submission'},
-  {title:'GP Challenge BPI Industry Visit',by:'Powerloom, Kumarapalayam',year:'2026',cat:'Academic',id:'Geotagged Report'},
   {title:'IEEE Membership',by:'Institute of Electrical and Electronics Engineers',year:'2024',cat:'Membership',id:'BIT-IECC Chapter',img:'assets/ieee-membership.jpg'},
-  {title:'BIT-IECC Active Member',by:'BIT IEEE Student Chapter',year:'2024',cat:'Membership',id:'ECE Dept.'},
   {title:'AViNYA Club Member',by:'Bannari Amman Institute of Technology',year:'2023',cat:'Club',id:'Technical Club'},
 ];
 

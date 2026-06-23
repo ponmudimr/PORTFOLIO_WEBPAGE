@@ -6,8 +6,48 @@
 <title>Ponmudi M R — ECE Engineer & Innovator</title>
 <meta name="description" content="Portfolio of Ponmudi M R — ECE Student, Embedded Systems Developer, Defense Tech Innovator at Bannari Amman Institute of Technology."/>
 <link rel="stylesheet" href="css/style.css"/>
+
+<!-- Three.js via ESM import map — no build step required -->
+<link rel="preconnect" href="https://unpkg.com" crossorigin/>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
 </head>
 <body>
+
+<!-- ══ IMMERSIVE WORLD LAYER (behind all content; decorative) ══ -->
+<div id="world-root" aria-hidden="true"><canvas id="world-canvas"></canvas></div>
+<div id="world-aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<!-- Loading screen shown while the WebGL world initialises -->
+<div id="world-loader" aria-hidden="true">
+  <div class="loader-core"></div>
+  <div class="loader-text">Entering the world</div>
+  <div class="loader-sub">Loading digital ecosystem…</div>
+</div>
+
+<!-- Heads-up display: current zone name -->
+<div id="world-hud" aria-hidden="true">
+  <div class="hud-bracket"></div>
+  <div id="zone-name">ARRIVAL</div>
+  <div class="hud-meta">PONMUDI · DIGITAL UNIVERSE</div>
+</div>
+
+<!-- Journey progress rail — jump between zones/locations -->
+<nav id="journey-rail" aria-label="World navigation">
+  <a href="#hero"     data-zone="ARRIVAL"><span></span><em>Arrival</em></a>
+  <a href="#about"    data-zone="ORIGIN"><span></span><em>Origin</em></a>
+  <a href="#skills"   data-zone="ARSENAL"><span></span><em>Arsenal</em></a>
+  <a href="#projects" data-zone="LANDMARKS"><span></span><em>Landmarks</em></a>
+  <a href="#certs"    data-zone="CREDENTIALS"><span></span><em>Credentials</em></a>
+  <a href="#resume"   data-zone="DOSSIER"><span></span><em>Dossier</em></a>
+  <a href="#contact"  data-zone="PORTAL"><span></span><em>Portal</em></a>
+</nav>
 
 <!-- NAVIGATION -->
 <nav id="navbar">
@@ -51,6 +91,7 @@
 
 <!-- ABOUT -->
 <section id="about">
+  <span class="ghost-word" aria-hidden="true">ORIGIN</span>
   <div class="section-inner">
     <div class="fade-up">
       <div class="section-tag">About</div>
@@ -109,6 +150,7 @@
 
 <!-- SKILLS -->
 <section id="skills" style="background:var(--bg2)">
+  <span class="ghost-word" aria-hidden="true">ARSENAL</span>
   <div class="section-inner">
     <div class="fade-up">
       <div class="section-tag">Skills</div>
@@ -120,6 +162,7 @@
 
 <!-- PROJECTS -->
 <section id="projects">
+  <span class="ghost-word" aria-hidden="true">LANDMARKS</span>
   <div class="section-inner">
     <div class="fade-up">
       <div class="section-tag">Projects</div>
@@ -139,6 +182,7 @@
 
 <!-- CERTS -->
 <section id="certs" style="background:var(--bg2)">
+  <span class="ghost-word" aria-hidden="true">CREDENTIALS</span>
   <div class="section-inner">
     <div class="fade-up">
       <div class="section-tag">Certificates</div>
@@ -160,6 +204,7 @@
 
 <!-- RESUME -->
 <section id="resume">
+  <span class="ghost-word" aria-hidden="true">DOSSIER</span>
   <div class="section-inner">
     <div class="fade-up">
       <div class="section-tag">Resume</div>
@@ -203,6 +248,7 @@
 
 <!-- CONTACT -->
 <section id="contact" style="background:var(--bg2)">
+  <span class="ghost-word" aria-hidden="true">PORTAL</span>
   <div class="section-inner">
     <div class="fade-up">
       <div class="section-tag">Contact</div>
@@ -239,5 +285,6 @@
 </footer>
 
 <script src="js/main.js"></script>
+<script type="module" src="js/world.js"></script>
 </body>
 </html>

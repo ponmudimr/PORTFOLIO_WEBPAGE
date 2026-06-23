@@ -285,3 +285,30 @@ const skillObs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
 },{threshold:.2});
 document.querySelectorAll('.skill-card').forEach(el=>skillObs.observe(el));
+
+// ── JOURNEY RAIL — highlight the current zone as you travel ──────────────────────
+const railLinks=[...document.querySelectorAll('#journey-rail a')];
+const railMap=new Map(railLinks.map(a=>[a.getAttribute('href').slice(1),a]));
+const railObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      railLinks.forEach(a=>a.classList.remove('active'));
+      const link=railMap.get(e.target.id);
+      if(link)link.classList.add('active');
+    }
+  });
+},{threshold:.4});
+['hero','about','skills','projects','certs','resume','contact']
+  .forEach(id=>{const el=document.getElementById(id);if(el)railObs.observe(el)});
+
+// ── SCROLL PROGRESS → CSS var (drives the rail fill + ambient UI reactions) ──────
+let _ticking=false;
+addEventListener('scroll',()=>{
+  if(_ticking)return;_ticking=true;
+  requestAnimationFrame(()=>{
+    const max=document.documentElement.scrollHeight-innerHeight;
+    const p=max>0?Math.min(1,Math.max(0,scrollY/max)):0;
+    document.documentElement.style.setProperty('--scroll-progress',p);
+    _ticking=false;
+  });
+},{passive:true});

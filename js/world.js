@@ -10,7 +10,6 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 // ── CAPABILITY DETECTION ────────────────────────────────────────────────────────
-// Decide whether this device gets the full 3D world or the lightweight fallback.
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarsePointer = matchMedia('(pointer: coarse)').matches;
 const lowMemory     = (navigator.deviceMemory && navigator.deviceMemory <= 2);
@@ -30,11 +29,11 @@ const HIGH_END = FULL_3D && (navigator.hardwareConcurrency ? navigator.hardwareC
 
 document.body.classList.add('immersive');
 if(!FULL_3D){
-  // Fallback: animated CSS aurora world + the enhanced 2D layout. No WebGL.
+  // Fallback: animated CSS aurora world + enhanced glass layout. No WebGL.
   document.body.classList.add('immersive-fallback');
   const loader = document.getElementById('world-loader');
   if(loader) loader.classList.add('hidden');
-  // Light parallax of the aurora to mouse on devices with a fine pointer.
+
   if(!coarsePointer && !reducedMotion){
     addEventListener('pointermove', e=>{
       const x = (e.clientX/innerWidth - .5);
@@ -44,15 +43,33 @@ if(!FULL_3D){
     }, {passive:true});
   }
 } else {
-  bootWorld();
+  try {
+    bootWorld();
+  } catch (err) {
+    console.error('Three.js 3D world failed to boot:', err);
+    document.body.classList.add('immersive-fallback');
+    const loader = document.getElementById('world-loader');
+    if(loader) loader.classList.add('hidden');
+  }
 }
 
 // ── MAIN ENGINE ──────────────────────────────────────────────────────────────────
 function bootWorld(){
   const canvas = document.getElementById('world-canvas');
+  if(!canvas) return;
+
   document.body.classList.add('immersive-3d');
 
-  // Seeded RNG so the world is the same on every load (composition stays "designed").
+  // Resource Disposal Registry for leak prevention
+  const disposableGeometries = new Set();
+  const disposableMaterials = new Set();
+  const disposableTextures = new Set();
+
+  function trackGeometry(g) { disposableGeometries.add(g); return g; }
+  function trackMaterial(m) { disposableMaterials.add(m); return m; }
+  function trackTexture(t) { disposableTextures.add(t); return t; }
+
+  // Seeded RNG so the world composition stays identical on every load.
   let _seed = 1337;
   const rng = ()=>{ _seed = (_seed*1664525 + 1013904223) % 4294967296; return _seed/4294967296; };
   const rand = (a,b)=> a + (b-a)*rng();
@@ -70,25 +87,26 @@ function bootWorld(){
   camera.position.set(0, 8, 40);
 
   // ── MOOD / PALETTE ──────────────────────────────────────────────────────────
-  // Two world moods, toggled by the theme button: NIGHT (default) and DAWN.
   const MOODS = {
     night: { sky:0x0a0a1f, horizon:0x1a1140, fog:0x0c1030, sun:0x6d8bff, sunInt:1.4, amb:0x202850, ambInt:.6, exposure:1.1 },
     dawn:  { sky:0x1b1330, horizon:0x4a2a55, fog:0x2a1d44, sun:0xffb56b, sunInt:1.8, amb:0x40304a, ambInt:.8, exposure:1.25 },
   };
-  let mood = MOODS.night;
+
+  const initialDark = window.PortfolioTheme ? window.PortfolioTheme.isDark() : true;
+  let mood = initialDark ? MOODS.night : MOODS.dawn;
 
   scene.fog = new THREE.FogExp2(mood.fog, 0.0012);
   scene.background = new THREE.Color(mood.sky);
 
-  // Gradient sky dome (cheap volumetric-ish backdrop via vertex-position shader).
-  const skyGeo = new THREE.SphereGeometry(1600, 32, 16);
-  const skyMat = new THREE.ShaderMaterial({
+  // Gradient sky dome (volumetric backdrop)
+  const skyGeo = trackGeometry(new THREE.SphereGeometry(1600, 32, 16));
+  const skyMat = trackMaterial(new THREE.ShaderMaterial({
     side: THREE.BackSide, depthWrite:false,
     uniforms:{ top:{value:new THREE.Color(mood.sky)}, bottom:{value:new THREE.Color(mood.horizon)}, off:{value:400} },
     vertexShader:`varying vec3 vP; void main(){ vP=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,
     fragmentShader:`varying vec3 vP; uniform vec3 top; uniform vec3 bottom; uniform float off;
       void main(){ float h=normalize(vP).y; float t=clamp((h*off+off)/(2.0*off),0.0,1.0); gl_FragColor=vec4(mix(bottom,top,t),1.0);}`
-  });
+  }));
   const sky = new THREE.Mesh(skyGeo, skyMat);
   scene.add(sky);
 
@@ -98,16 +116,15 @@ function bootWorld(){
   const sun = new THREE.DirectionalLight(mood.sun, mood.sunInt);
   sun.position.set(-60, 120, 40);
   scene.add(sun);
-  const rim = new THREE.DirectionalLight(0xff5fae, 0.5); // pink rim from behind
+  const rim = new THREE.DirectionalLight(0xff5fae, 0.5);
   rim.position.set(40, 20, -120);
   scene.add(rim);
-  // A travelling accent light that picks up the current zone's colour.
+
   const accent = new THREE.PointLight(0x5bd6ff, 2.2, 320, 1.8);
   scene.add(accent);
   let accentTargetColor = new THREE.Color(0x5bd6ff);
 
   // ── ZONE LAYOUT ───────────────────────────────────────────────────────────────
-  // One zone per portfolio section, strung along -Z. The camera weaves between them.
   const ZONES = [
     { id:'hero',     z:   0, color:0x5bd6ff, label:'ARRIVAL'     },
     { id:'about',    z:-150, color:0x8a6bff, label:'ORIGIN'      },
@@ -118,8 +135,7 @@ function bootWorld(){
     { id:'contact',  z:-1000,color:0xff4fa3, label:'THE PORTAL'  },
   ];
 
-  // Camera keyframes — position + look target, offset to the side of each zone so
-  // landmarks sweep past in parallax rather than coming straight at the lens.
+  // Camera keyframes — spline curve coordinates along Z
   const camKeys = ZONES.map((zoneItem, i)=>{
     const side = i % 2 === 0 ? 1 : -1;
     return {
@@ -131,16 +147,16 @@ function bootWorld(){
   const lookCurve = new THREE.CatmullRomCurve3(camKeys.map(k=>k.look), false, 'catmullrom', 0.5);
 
   // ── MATERIAL HELPERS ──────────────────────────────────────────────────────────
-  const rockMat = (c)=> new THREE.MeshStandardMaterial({ color:c, flatShading:true, roughness:.95, metalness:.05 });
-  const glowMat = (c, inten=2)=> new THREE.MeshStandardMaterial({
-    color:c, emissive:c, emissiveIntensity:inten, roughness:.3, metalness:.1, flatShading:true });
+  const rockMat = (c)=> trackMaterial(new THREE.MeshStandardMaterial({ color:c, flatShading:true, roughness:.95, metalness:.05 }));
+  const glowMat = (c, inten=2)=> trackMaterial(new THREE.MeshStandardMaterial({
+    color:c, emissive:c, emissiveIntensity:inten, roughness:.3, metalness:.1, flatShading:true }));
 
-  const animated = []; // objects with a custom per-frame update {obj, fn}
+  const animated = [];
 
   // ── STARFIELD ───────────────────────────────────────────────────────────────────
   (function stars(){
     const N = HIGH_END ? 2600 : 1400;
-    const g = new THREE.BufferGeometry();
+    const g = trackGeometry(new THREE.BufferGeometry());
     const pos = new Float32Array(N*3);
     for(let i=0;i<N;i++){
       const r = rand(400,1500), th = rand(0,Math.PI*2), ph = Math.acos(rand(-1,1));
@@ -149,16 +165,16 @@ function bootWorld(){
       pos[i*3+2] = r*Math.sin(ph)*Math.sin(th) - 400;
     }
     g.setAttribute('position', new THREE.BufferAttribute(pos,3));
-    const m = new THREE.PointsMaterial({ color:0xbcd2ff, size:1.6, sizeAttenuation:true, transparent:true, opacity:.9, depthWrite:false });
+    const m = trackMaterial(new THREE.PointsMaterial({ color:0xbcd2ff, size:1.6, sizeAttenuation:true, transparent:true, opacity:.9, depthWrite:false }));
     const pts = new THREE.Points(g,m);
     scene.add(pts);
     animated.push({obj:pts, fn:(t)=>{ m.opacity = .6 + 0.35*Math.sin(t*0.8); }});
   })();
 
-  // ── FLOATING DUST / SPARK FIELD (parallax depth) ─────────────────────────────────
+  // ── FLOATING DUST FIELD ────────────────────────────────────────────────────────
   (function dust(){
     const N = HIGH_END ? 900 : 450;
-    const g = new THREE.BufferGeometry();
+    const g = trackGeometry(new THREE.BufferGeometry());
     const pos = new Float32Array(N*3);
     for(let i=0;i<N;i++){
       pos[i*3]   = rand(-160,160);
@@ -166,26 +182,24 @@ function bootWorld(){
       pos[i*3+2] = rand(80,-1100);
     }
     g.setAttribute('position', new THREE.BufferAttribute(pos,3));
-    const m = new THREE.PointsMaterial({ color:0x8fb6ff, size:.9, transparent:true, opacity:.5,
-      blending:THREE.AdditiveBlending, depthWrite:false });
+    const m = trackMaterial(new THREE.PointsMaterial({ color:0x8fb6ff, size:.9, transparent:true, opacity:.5,
+      blending:THREE.AdditiveBlending, depthWrite:false }));
     const pts = new THREE.Points(g,m);
     scene.add(pts);
     animated.push({obj:pts, fn:(t)=>{ pts.rotation.y = t*0.01; pts.position.y = Math.sin(t*0.3)*1.5; }});
   })();
 
-  // ── DISTANT MOUNTAIN RIDGES (silhouette, scale & depth) ──────────────────────────
+  // ── DISTANT MOUNTAIN RIDGES ──────────────────────────────────────────────────
   function mountainRange(zCenter, baseColor){
     const grp = new THREE.Group();
-    // Wide height range + heavy z-scatter keeps the silhouette jagged (no straight
-    // top edge), and the band sits low so its ridgeline stays out of the eyeline.
     const layers = [ {z:-300, h:210, w:1000, c:0x10142e, n:9},
                      {z:-180, h:150, w:840,  c:0x161b3e, n:10},
                      {z:-90,  h:95,  w:680,  c:0x1f2654, n:11} ];
     layers.forEach(L=>{
       for(let i=0;i<L.n;i++){
         const h = L.h * rand(.45,1.7);
-        const geo = new THREE.ConeGeometry(L.w/L.n*rand(.7,1.25), h, 5, 1);
-        const m = new THREE.MeshStandardMaterial({ color:L.c, flatShading:true, roughness:1, metalness:0, fog:true });
+        const geo = trackGeometry(new THREE.ConeGeometry(L.w/L.n*rand(.7,1.25), h, 5, 1));
+        const m = trackMaterial(new THREE.MeshStandardMaterial({ color:L.c, flatShading:true, roughness:1, metalness:0, fog:true }));
         const peak = new THREE.Mesh(geo,m);
         peak.rotation.y = rand(0,Math.PI);
         peak.position.set((i-L.n/2)*(L.w/L.n) + rand(-40,40), h/2 - 78, zCenter + L.z + rand(-80,80));
@@ -198,15 +212,17 @@ function bootWorld(){
   mountainRange(-150, 0x141833);
   mountainRange(-620, 0x161a3a);
 
-  // ── FLOATING ISLAND (low-poly rock chunk with glowing underside) ─────────────────
+  // ── FLOATING ISLAND ─────────────────────────────────────────────────────────
   function floatingIsland(x,y,z,scale,color){
     const grp = new THREE.Group();
-    const top = new THREE.Mesh(new THREE.IcosahedronGeometry(scale,1), rockMat(0x2a2f55));
+    const topGeo = trackGeometry(new THREE.IcosahedronGeometry(scale,1));
+    const top = new THREE.Mesh(topGeo, rockMat(0x2a2f55));
     top.scale.y = .5; grp.add(top);
-    const base = new THREE.Mesh(new THREE.ConeGeometry(scale*.9, scale*1.8, 6, 1), rockMat(0x1d2142));
+    const baseGeo = trackGeometry(new THREE.ConeGeometry(scale*.9, scale*1.8, 6, 1));
+    const base = new THREE.Mesh(baseGeo, rockMat(0x1d2142));
     base.position.y = -scale*1.0; base.rotation.y = rand(0,3); grp.add(base);
-    // glowing crystal vein on the underside
-    const vein = new THREE.Mesh(new THREE.IcosahedronGeometry(scale*.35,0), glowMat(color,2.4));
+    const veinGeo = trackGeometry(new THREE.IcosahedronGeometry(scale*.35,0));
+    const vein = new THREE.Mesh(veinGeo, glowMat(color,2.4));
     vein.position.y = -scale*1.4; grp.add(vein);
     grp.position.set(x,y,z);
     const phase = rand(0,6.28), amp = rand(1.2,2.6), spin = rand(-.05,.05);
@@ -215,12 +231,13 @@ function bootWorld(){
     return grp;
   }
 
-  // ── CRYSTAL CLUSTER (emissive spires that pulse) ─────────────────────────────────
+  // ── CRYSTAL CLUSTER ─────────────────────────────────────────────────────────
   function crystalCluster(x,y,z,color,count=5){
     const grp = new THREE.Group();
     for(let i=0;i<count;i++){
       const h = rand(6,16);
-      const c = new THREE.Mesh(new THREE.ConeGeometry(rand(1,2.4), h, 5, 1), glowMat(color, rand(1.6,3)));
+      const cGeo = trackGeometry(new THREE.ConeGeometry(rand(1,2.4), h, 5, 1));
+      const c = new THREE.Mesh(cGeo, glowMat(color, rand(1.6,3)));
       c.position.set(rand(-6,6), h/2, rand(-6,6));
       c.rotation.set(rand(-.2,.2), rand(0,3), rand(-.2,.2));
       grp.add(c);
@@ -233,7 +250,7 @@ function bootWorld(){
     return grp;
   }
 
-  // ── ENERGY ORB (additive glow sprite + halo) ─────────────────────────────────────
+  // ── ENERGY ORB ──────────────────────────────────────────────────────────────
   const orbTex = (function(){
     const c = document.createElement('canvas'); c.width=c.height=128;
     const g = c.getContext('2d');
@@ -243,10 +260,11 @@ function bootWorld(){
     grad.addColorStop(.6,'rgba(160,200,255,.25)');
     grad.addColorStop(1,'rgba(160,200,255,0)');
     g.fillStyle=grad; g.fillRect(0,0,128,128);
-    const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace; return tex;
+    const tex = trackTexture(new THREE.CanvasTexture(c)); tex.colorSpace = THREE.SRGBColorSpace; return tex;
   })();
+
   function energyOrb(x,y,z,color,size=6){
-    const mat = new THREE.SpriteMaterial({ map:orbTex, color, blending:THREE.AdditiveBlending, depthWrite:false, transparent:true });
+    const mat = trackMaterial(new THREE.SpriteMaterial({ map:orbTex, color, blending:THREE.AdditiveBlending, depthWrite:false, transparent:true }));
     const s = new THREE.Sprite(mat); s.scale.set(size,size,1); s.position.set(x,y,z);
     scene.add(s);
     const phase=rand(0,6.28), amp=rand(2,5);
@@ -255,13 +273,15 @@ function bootWorld(){
     return s;
   }
 
-  // ── PATROLLING DRONE (small craft with blinking beacon) ──────────────────────────
+  // ── PATROLLING DRONE ────────────────────────────────────────────────────────
   function drone(cx,cy,cz,radius,color){
     const grp = new THREE.Group();
-    const body = new THREE.Mesh(new THREE.OctahedronGeometry(1.1,0),
-      new THREE.MeshStandardMaterial({color:0x3a3f66, metalness:.7, roughness:.3, flatShading:true}));
+    const bodyGeo = trackGeometry(new THREE.OctahedronGeometry(1.1,0));
+    const bodyMat = trackMaterial(new THREE.MeshStandardMaterial({color:0x3a3f66, metalness:.7, roughness:.3, flatShading:true}));
+    const body = new THREE.Mesh(bodyGeo, bodyMat);
     grp.add(body);
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(2,.12,8,24), glowMat(color,2.5));
+    const ringGeo = trackGeometry(new THREE.TorusGeometry(2,.12,8,24));
+    const ring = new THREE.Mesh(ringGeo, glowMat(color,2.5));
     ring.rotation.x = Math.PI/2; grp.add(ring);
     const beacon = new THREE.PointLight(color, 1.5, 40); grp.add(beacon);
     scene.add(grp);
@@ -276,10 +296,10 @@ function bootWorld(){
     return grp;
   }
 
-  // ── DIGITAL FOREST (instanced glowing pines) ────────────────────────────────────
+  // ── DIGITAL FOREST ──────────────────────────────────────────────────────────
   function digitalForest(zCenter, color, count){
-    const geo = new THREE.ConeGeometry(1.6, 9, 6, 1);
-    const mat = new THREE.MeshStandardMaterial({ color:0x14352e, emissive:color, emissiveIntensity:.5, flatShading:true, roughness:.8 });
+    const geo = trackGeometry(new THREE.ConeGeometry(1.6, 9, 6, 1));
+    const mat = trackMaterial(new THREE.MeshStandardMaterial({ color:0x14352e, emissive:color, emissiveIntensity:.5, flatShading:true, roughness:.8 }));
     const mesh = new THREE.InstancedMesh(geo, mat, count);
     const d = new THREE.Object3D();
     for(let i=0;i<count;i++){
@@ -292,27 +312,27 @@ function bootWorld(){
     return mesh;
   }
 
-  // ── GROUND HAZE (soft radial glow on the valley floor) ──────────────────────────
-  // Uses the soft orb texture (not a hard-edged plane) so there is no straight
-  // edge to read as a horizontal line at the horizon.
+  // ── GROUND HAZE ─────────────────────────────────────────────────────────────
   function valleyFloor(z, color){
-    const mat = new THREE.SpriteMaterial({ map:orbTex, color, transparent:true, opacity:.5,
-      blending:THREE.AdditiveBlending, depthWrite:false });
+    const mat = trackMaterial(new THREE.SpriteMaterial({ map:orbTex, color, transparent:true, opacity:.5,
+      blending:THREE.AdditiveBlending, depthWrite:false }));
     const s = new THREE.Sprite(mat); s.scale.set(420,420,1); s.position.set(0,-34,z);
     scene.add(s);
   }
 
-  // ── PORTAL (contact / command center) ────────────────────────────────────────────
+  // ── PORTAL ──────────────────────────────────────────────────────────────────
   function portal(x,y,z,color){
     const grp = new THREE.Group();
     for(let i=0;i<4;i++){
       const r = 14 - i*2.4;
-      const ring = new THREE.Mesh(new THREE.TorusGeometry(r,.4,12,48), glowMat(color, 2.4 - i*.3));
+      const ringGeo = trackGeometry(new THREE.TorusGeometry(r,.4,12,48));
+      const ring = new THREE.Mesh(ringGeo, glowMat(color, 2.4 - i*.3));
       ring.position.z = -i*2; grp.add(ring);
       animated.push({obj:ring, fn:(t)=>{ ring.rotation.z = t*(.2 + i*.12)*(i%2?1:-1); }});
     }
-    const core = new THREE.Mesh(new THREE.CircleGeometry(11,48),
-      new THREE.MeshBasicMaterial({ color, transparent:true, opacity:.18, blending:THREE.AdditiveBlending, side:THREE.DoubleSide, depthWrite:false }));
+    const coreGeo = trackGeometry(new THREE.CircleGeometry(11,48));
+    const coreMat = trackMaterial(new THREE.MeshBasicMaterial({ color, transparent:true, opacity:.18, blending:THREE.AdditiveBlending, side:THREE.DoubleSide, depthWrite:false }));
+    const core = new THREE.Mesh(coreGeo, coreMat);
     grp.add(core);
     grp.position.set(x,y,z);
     scene.add(grp);
@@ -320,12 +340,14 @@ function bootWorld(){
     return grp;
   }
 
-  // ── CENTRAL MONUMENT (hero arrival landmark) ─────────────────────────────────────
+  // ── CENTRAL MONUMENT ────────────────────────────────────────────────────────
   function heroMonument(){
     const grp = new THREE.Group();
-    const shard = new THREE.Mesh(new THREE.OctahedronGeometry(9,0), glowMat(0x5bd6ff,2.2));
+    const shardGeo = trackGeometry(new THREE.OctahedronGeometry(9,0));
+    const shard = new THREE.Mesh(shardGeo, glowMat(0x5bd6ff,2.2));
     shard.scale.y = 1.8; grp.add(shard);
-    const halo = new THREE.Mesh(new THREE.TorusGeometry(16,.3,12,64), glowMat(0x8a6bff,2));
+    const haloGeo = trackGeometry(new THREE.TorusGeometry(16,.3,12,64));
+    const halo = new THREE.Mesh(haloGeo, glowMat(0x8a6bff,2));
     halo.rotation.x = Math.PI/2.2; grp.add(halo);
     grp.position.set(0,6,-30);
     scene.add(grp);
@@ -339,13 +361,13 @@ function bootWorld(){
   for(let k=0;k<6;k++) energyOrb(rand(-40,40), rand(2,30), rand(10,-60), 0x7fb4ff, rand(3,6));
   drone(0,18,-20,26,0x5bd6ff); drone(-20,12,-40,18,0x8a6bff);
 
-  // ABOUT — origin island with floating memory shards
+  // ABOUT
   floatingIsland(-14,4,-150,9,0x8a6bff);
   floatingIsland(20,12,-185,6,0x5bd6ff);
   crystalCluster(-10,-12,-150,0x8a6bff,5);
   for(let k=0;k<4;k++) energyOrb(rand(-30,30),rand(8,28),-150+rand(-30,30),0x8a6bff,rand(3,5));
 
-  // SKILLS — technology monoliths (one cluster of spires per zone, dense & glowing)
+  // SKILLS
   digitalForest(-320,0x3df0c5,HIGH_END?70:35);
   for(let k=0;k<6;k++){
     const ang = k/6*Math.PI*2;
@@ -355,7 +377,7 @@ function bootWorld(){
   drone(0,20,-320,40,0x3df0c5);
   valleyFloor(-320,0x3df0c5);
 
-  // PROJECTS — discoverable landmark structures
+  // PROJECTS
   [[-26,2,-470,0xff7a59],[22,8,-510,0xffd166],[-8,18,-540,0xff7a59],[14,-4,-485,0xff5fae]].forEach(p=>{
     floatingIsland(p[0],p[1],p[2],rand(6,10),p[3]);
     crystalCluster(p[0],p[1]-14,p[2],p[3],5);
@@ -363,7 +385,7 @@ function bootWorld(){
   for(let k=0;k<6;k++) energyOrb(rand(-40,40),rand(4,30),-500+rand(-50,50),0xff9a59,rand(3,6));
   drone(0,16,-500,46,0xff7a59);
 
-  // CERTS — hall of glowing credential tablets (floating islands in a ring)
+  // CERTS
   for(let k=0;k<7;k++){
     const ang = k/7*Math.PI*2;
     floatingIsland(Math.cos(ang)*40, rand(0,18), -680+Math.sin(ang)*40, rand(4,6), 0xffd166);
@@ -372,18 +394,18 @@ function bootWorld(){
   valleyFloor(-680,0xffd166);
   drone(0,22,-680,38,0xffd166);
 
-  // RESUME — monolith dossier
+  // RESUME
   floatingIsland(0,8,-840,12,0x6d8bff);
   crystalCluster(-12,-8,-840,0x6d8bff,5); crystalCluster(12,-8,-840,0x6d8bff,5);
   for(let k=0;k<4;k++) energyOrb(rand(-26,26),rand(6,26),-840+rand(-20,20),0x6d8bff,rand(3,5));
 
-  // CONTACT — the portal / command center
+  // CONTACT
   portal(0,8,-1010,0xff4fa3);
   digitalForest(-1000,0xff4fa3,HIGH_END?50:25);
   for(let k=0;k<8;k++) energyOrb(rand(-50,50),rand(2,34),-1000+rand(-40,40),0xff4fa3,rand(3,6));
   drone(0,20,-1000,50,0xff4fa3); drone(20,12,-1000,30,0x8a6bff);
 
-  // ── POST-PROCESSING (bloom) ──────────────────────────────────────────────────────
+  // ── POST-PROCESSING ──────────────────────────────────────────────────────────
   let composer = null;
   if(HIGH_END){
     composer = new EffectComposer(renderer);
@@ -408,7 +430,7 @@ function bootWorld(){
     tmy = (e.clientY/innerHeight - .5);
   }, {passive:true});
 
-  // ── PER-ZONE MOOD (lighting + accent colour shift via IntersectionObserver) ─────────
+  // ── PER-ZONE MOOD ─────────────────────────────────────────────────────────────────
   const sections = ZONES.map(zoneItem=>document.getElementById(zoneItem.id));
   const labelEl = document.getElementById('zone-name');
   const obs = new IntersectionObserver(entries=>{
@@ -425,15 +447,13 @@ function bootWorld(){
   }, {threshold:.4});
   sections.forEach(s=>s && obs.observe(s));
 
-  // ── WORLD MOOD TOGGLE (repurpose the theme button: night ↔ dawn) ────────────────────
-  const themeBtn = document.getElementById('theme-btn');
-  if(themeBtn){
-    themeBtn.title = 'Toggle world ambiance';
-    themeBtn.addEventListener('click', ()=>{
-      mood = (mood === MOODS.night) ? MOODS.dawn : MOODS.night;
+  // ── THEME LISTENERS ──────────────────────────────────────────────────────────────
+  if (window.PortfolioTheme) {
+    window.PortfolioTheme.onChange((isDark) => {
+      mood = isDark ? MOODS.night : MOODS.dawn;
     });
   }
-  // Smoothly lerp scene colours toward the active mood every frame.
+
   const _sky=new THREE.Color(), _hor=new THREE.Color(), _fog=new THREE.Color(),
         _amb=new THREE.Color(), _sun=new THREE.Color();
   function applyMood(dt){
@@ -461,26 +481,24 @@ function bootWorld(){
     if(loader){ loader.classList.add('hidden'); setTimeout(()=>loader.remove(), 900); }
   }
 
-  // ── RENDER LOOP ───────────────────────────────────────────────────────────────────
+  // ── RENDER LOOP & TAB PAUSE ───────────────────────────────────────────────────────
   const clock = new THREE.Clock();
   const camPos = new THREE.Vector3(), camLook = new THREE.Vector3();
   let firstFrame = true;
+
   function tick(){
     const dt = Math.min(clock.getDelta(), .05);
     const t = clock.elapsedTime;
 
-    // ease scroll progress & mouse for a cinematic, weighty feel
     progress += (targetProgress - progress) * Math.min(1, dt*3.5);
     mx += (tmx - mx) * Math.min(1, dt*3);
     my += (tmy - my) * Math.min(1, dt*3);
 
-    // camera follows the authored curve, with mouse parallax layered on top
     posCurve.getPointAt(progress, camPos);
     lookCurve.getPointAt(Math.min(1, progress+0.02), camLook);
     camera.position.set(camPos.x + mx*10, camPos.y - my*6, camPos.z);
     camera.lookAt(camLook.x + mx*6, camLook.y - my*4, camLook.z);
 
-    // travelling accent light tracks the camera & current zone colour
     accent.position.set(camPos.x, camPos.y+6, camPos.z-40);
     accent.color.lerp(accentTargetColor, Math.min(1, dt*2));
 
@@ -492,11 +510,29 @@ function bootWorld(){
     if(firstFrame){ firstFrame=false; hideLoader(); }
     if(running) rafId = requestAnimationFrame(tick);
   }
+
   let running = true, rafId = requestAnimationFrame(tick);
 
-  // Pause the render loop entirely when the tab is hidden (battery / perf).
   document.addEventListener('visibilitychange', ()=>{
-    if(document.hidden){ running = false; cancelAnimationFrame(rafId); }
-    else if(!running){ running = true; clock.getDelta(); rafId = requestAnimationFrame(tick); }
+    if(document.hidden){
+      running = false;
+      cancelAnimationFrame(rafId);
+    } else if(!running){
+      running = true;
+      clock.getDelta(); // reset clock delta to avoid sudden delta jump
+      rafId = requestAnimationFrame(tick);
+    }
+  });
+
+  // ── TEARDOWN & RESOURCE CLEANUP ──────────────────────────────────────────────────
+  window.addEventListener('beforeunload', () => {
+    running = false;
+    cancelAnimationFrame(rafId);
+
+    disposableGeometries.forEach(g => g.dispose());
+    disposableMaterials.forEach(m => m.dispose());
+    disposableTextures.forEach(t => t.dispose());
+
+    if (renderer) renderer.dispose();
   });
 }

@@ -18,9 +18,9 @@
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --maxw: 1100px;
   --zone-accent: #0071e3;
-  --doodle-stroke: rgba(0, 113, 227, 0.07);
-  --doodle-accent: rgba(0, 113, 227, 0.10);
-  --doodle-dash: rgba(0, 113, 227, 0.05);
+  --doodle-stroke: rgba(0, 113, 227, 0.12);
+  --doodle-accent: rgba(0, 113, 227, 0.18);
+  --doodle-dash: rgba(0, 113, 227, 0.08);
 }
 
 .dark-mode {
@@ -34,9 +34,9 @@
   --accent: #5bd6ff;
   --accent-hover: #8fe4ff;
   --accent-light: rgba(91, 214, 255, 0.15);
-  --doodle-stroke: rgba(91, 214, 255, 0.12);
-  --doodle-accent: rgba(91, 214, 255, 0.16);
-  --doodle-dash: rgba(91, 214, 255, 0.08);
+  --doodle-stroke: rgba(91, 214, 255, 0.16);
+  --doodle-accent: rgba(91, 214, 255, 0.24);
+  --doodle-dash: rgba(91, 214, 255, 0.10);
 }
 
 /* ACCESSIBILITY SKIP LINK */
@@ -1502,7 +1502,7 @@ body.immersive .hero-name {
   .ghost-word { font-size: clamp(3.5rem, 18vw, 7rem); }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 600px) {
   .section-doodles { display: none !important; }
 }
 
@@ -1527,7 +1527,7 @@ section {
   position: absolute;
   stroke: var(--doodle-stroke);
   fill: none;
-  stroke-width: 0.95;
+  stroke-width: 1.25;
   stroke-linecap: round;
   stroke-linejoin: round;
   transition: stroke 0.4s ease;

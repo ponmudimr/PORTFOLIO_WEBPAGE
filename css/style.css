@@ -18,9 +18,9 @@
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --maxw: 1100px;
   --zone-accent: #0071e3;
-  --doodle-stroke: rgba(0, 113, 227, 0.12);
-  --doodle-accent: rgba(0, 113, 227, 0.18);
-  --doodle-dash: rgba(0, 113, 227, 0.08);
+  --doodle-stroke: rgba(0, 113, 227, 0.18);
+  --doodle-accent: rgba(0, 113, 227, 0.28);
+  --doodle-dash: rgba(0, 113, 227, 0.12);
 }
 
 .dark-mode {
@@ -34,9 +34,9 @@
   --accent: #5bd6ff;
   --accent-hover: #8fe4ff;
   --accent-light: rgba(91, 214, 255, 0.15);
-  --doodle-stroke: rgba(91, 214, 255, 0.16);
-  --doodle-accent: rgba(91, 214, 255, 0.24);
-  --doodle-dash: rgba(91, 214, 255, 0.10);
+  --doodle-stroke: rgba(91, 214, 255, 0.24);
+  --doodle-accent: rgba(91, 214, 255, 0.36);
+  --doodle-dash: rgba(91, 214, 255, 0.16);
 }
 
 /* ACCESSIBILITY SKIP LINK */
@@ -1502,77 +1502,159 @@ body.immersive .hero-name {
   .ghost-word { font-size: clamp(3.5rem, 18vw, 7rem); }
 }
 
-@media (max-width: 600px) {
-  .section-doodles { display: none !important; }
-}
-
 /* ══════════════════════════════════════════════════════════════════════════════
-   BACKGROUND DOODLE LAYER (OPTION B: CHALK / BLUEPRINT SCHEMATIC SKETCH)
+   FULL-BLEED TILED ICON PATTERN BACKGROUND LAYER
    ══════════════════════════════════════════════════════════════════════════════ */
 
-section {
-  position: relative;
-}
-
-.section-doodles {
-  position: absolute;
+#doodle-pattern-bg {
+  position: fixed;
   inset: 0;
   pointer-events: none;
   user-select: none;
   z-index: 0;
   overflow: hidden;
+  opacity: 0.95;
+  transition: opacity 0.4s ease;
 }
 
-.doodle-svg {
-  position: absolute;
+#doodle-pattern-bg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.pattern-icon {
   stroke: var(--doodle-stroke);
   fill: none;
-  stroke-width: 1.25;
+  stroke-width: 1.2;
   stroke-linecap: round;
   stroke-linejoin: round;
   transition: stroke 0.4s ease;
 }
 
-.doodle-dash {
+.pattern-dash {
   stroke-dasharray: 3 3;
   stroke: var(--doodle-dash);
 }
 
-.doodle-accent-path {
+.pattern-accent {
   stroke: var(--doodle-accent);
 }
 
-.doodle-text {
-  font-family: monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-  font-size: 7px;
-  fill: var(--doodle-stroke);
-  stroke: none;
-  letter-spacing: 0.4px;
+/* ══════════════════════════════════════════════════════════════════════════════
+   READABILITY & BACKDROP TREATMENTS FOR ALL CONTENT CONTAINERS
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* Hero Container Backdrop */
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  padding: 3rem 2rem;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+.dark-mode .hero-inner {
+  background: rgba(11, 14, 26, 0.85);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .doodle-drift-1 {
-    animation: doodleDrift1 18s ease-in-out infinite alternate;
-  }
-  .doodle-drift-2 {
-    animation: doodleDrift2 24s ease-in-out infinite alternate;
-  }
-  .doodle-pulse {
-    animation: doodlePulse 12s ease-in-out infinite alternate;
-  }
+/* About Section Backdrops */
+.profile-card {
+  background: rgba(251, 251, 253, 0.90);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.dark-mode .profile-card {
+  background: rgba(26, 32, 54, 0.90);
 }
 
-@keyframes doodleDrift1 {
-  0% { transform: translateY(0px) rotate(0deg); }
-  100% { transform: translateY(-5px) rotate(1deg); }
+.about-bio {
+  background: rgba(245, 245, 247, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.dark-mode .about-bio {
+  background: rgba(20, 24, 41, 0.88);
 }
 
-@keyframes doodleDrift2 {
-  0% { transform: translateY(0px) rotate(0deg); }
-  100% { transform: translateY(6px) rotate(-1deg); }
+.timeline .tl-content {
+  background: rgba(245, 245, 247, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+.dark-mode .timeline .tl-content {
+  background: rgba(20, 24, 41, 0.85);
 }
 
-@keyframes doodlePulse {
-  0% { transform: scale(1); }
-  100% { transform: scale(1.03); }
+/* Skills Cards Backdrop */
+.skill-card, .skills-category {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.dark-mode .skill-card, .dark-mode .skills-category {
+  background: rgba(14, 18, 33, 0.90) !important;
+}
+
+/* Project Cards Backdrop */
+.project-card {
+  background: rgba(245, 245, 247, 0.90) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.dark-mode .project-card {
+  background: rgba(20, 24, 41, 0.90) !important;
+}
+
+/* Credentials Cards Backdrop */
+.cert-card {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.dark-mode .cert-card {
+  background: rgba(14, 18, 33, 0.90) !important;
+}
+
+/* Resume Section Backdrop */
+.resume-card {
+  background: rgba(245, 245, 247, 0.90);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.dark-mode .resume-card {
+  background: rgba(20, 24, 41, 0.90);
+}
+
+.resume-info {
+  background: rgba(245, 245, 247, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.dark-mode .resume-info {
+  background: rgba(20, 24, 41, 0.88);
+}
+
+/* Contact Section Backdrop */
+.contact-card, .contact-cta {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.dark-mode .contact-card, .dark-mode .contact-cta {
+  background: rgba(14, 18, 33, 0.90) !important;
 }

@@ -18,6 +18,9 @@
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --maxw: 1100px;
   --zone-accent: #0071e3;
+  --doodle-stroke: rgba(0, 113, 227, 0.20);
+  --doodle-accent: rgba(0, 113, 227, 0.32);
+  --doodle-dash: rgba(0, 113, 227, 0.14);
 }
 
 .dark-mode {
@@ -31,6 +34,9 @@
   --accent: #5bd6ff;
   --accent-hover: #8fe4ff;
   --accent-light: rgba(91, 214, 255, 0.15);
+  --doodle-stroke: rgba(91, 214, 255, 0.22);
+  --doodle-accent: rgba(91, 214, 255, 0.36);
+  --doodle-dash: rgba(91, 214, 255, 0.14);
 }
 
 /* ACCESSIBILITY SKIP LINK */
@@ -1494,4 +1500,76 @@ body.immersive .hero-name {
   #world-hud { left: 1rem; bottom: 1rem; }
   #zone-name { font-size: 1.2rem; }
   .ghost-word { font-size: clamp(3.5rem, 18vw, 7rem); }
+  .doodle-svg { opacity: 0.55; transform-origin: center center; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   BACKGROUND DOODLE LAYER (OPTION B: CHALK / BLUEPRINT SCHEMATIC SKETCH)
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+section {
+  position: relative;
+}
+
+.section-doodles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.doodle-svg {
+  position: absolute;
+  stroke: var(--doodle-stroke);
+  fill: none;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.4s ease;
+}
+
+.doodle-dash {
+  stroke-dasharray: 4 3;
+  stroke: var(--doodle-dash);
+}
+
+.doodle-accent-path {
+  stroke: var(--doodle-accent);
+}
+
+.doodle-text {
+  font-family: monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 8px;
+  fill: var(--doodle-stroke);
+  stroke: none;
+  letter-spacing: 0.5px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .doodle-drift-1 {
+    animation: doodleDrift1 16s ease-in-out infinite alternate;
+  }
+  .doodle-drift-2 {
+    animation: doodleDrift2 22s ease-in-out infinite alternate;
+  }
+  .doodle-pulse {
+    animation: doodlePulse 8s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes doodleDrift1 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-7px) rotate(1.2deg); }
+}
+
+@keyframes doodleDrift2 {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(8px) rotate(-1.5deg); }
+}
+
+@keyframes doodlePulse {
+  0% { opacity: 0.65; }
+  100% { opacity: 1; }
 }

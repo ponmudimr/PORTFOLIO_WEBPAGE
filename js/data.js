@@ -138,6 +138,13 @@ window.PORTFOLIO_DATA = {
 
   certs: [
     {
+      title: 'CHRONOBIT \'26 — 2nd Place · Digital Clock (Discrete IC Design)',
+      by: 'Digital Electronics Internal Hackathon — Dept. of ECE, Bannari Amman Institute of Technology',
+      year: '2026',
+      cat: 'Award',
+      id: 'Team Zero Hour · 2nd Place'
+    },
+    {
       title: 'NHIDE 2026 — 1st Prize · Solar Powered RF Communication',
       by: 'National Hackathon for Innovation, Design & Entrepreneurship — Guru Ghasidas Vishwavidyalaya',
       year: '2026',
@@ -180,6 +187,11 @@ window.PORTFOLIO_DATA = {
   ],
 
   timeline: [
+    {
+      year: '2026',
+      title: 'CHRONOBIT \'26 — 2nd Place',
+      desc: 'Digital Electronics Internal Hackathon, Dept. of ECE, BIT · Team "Zero Hour" with Renganathan S R · Built a digital clock from discrete IC components'
+    },
     {
       year: '2026',
       title: 'NHIDE 2026 — 1st Prize ₹50,000',

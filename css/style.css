@@ -233,13 +233,13 @@ nav#navbar {
 
 /* ── HERO SECTION ── */
 #hero {
-  min-height: 100vh;
+  min-height: 82vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 7rem 1.5rem 4rem;
+  padding: 6rem 1.5rem 2.5rem;
   position: relative;
 }
 
@@ -325,7 +325,7 @@ nav#navbar {
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .btn-primary {
@@ -399,7 +399,7 @@ nav#navbar {
 
 /* ── COMMON SECTIONS ── */
 section {
-  padding: 6rem 1.5rem;
+  padding: 4rem 1.5rem;
   position: relative;
 }
 
@@ -421,14 +421,14 @@ section {
   font-size: clamp(1.7rem, 3.6vw, 2.5rem);
   font-weight: 800;
   letter-spacing: -0.02em;
-  margin-bottom: 3rem;
+  margin-bottom: 2.25rem;
   color: var(--text);
   position: relative;
 }
 .section-title::after {
   content: '';
   display: block;
-  margin-top: 0.85rem;
+  margin-top: 0.7rem;
   width: 48px;
   height: 3px;
   background: var(--accent);
@@ -439,7 +439,7 @@ section {
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1.6fr;
-  gap: 3rem;
+  gap: 2.5rem;
   align-items: start;
 }
 
@@ -517,7 +517,7 @@ section {
   font-size: 1.05rem;
   color: var(--text2);
   line-height: 1.75;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.75rem;
   font-weight: 400;
 }
 
@@ -993,7 +993,7 @@ section {
 .resume-wrap {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  gap: 3rem;
+  gap: 2.5rem;
   align-items: center;
 }
 
@@ -1085,7 +1085,7 @@ section {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1.25rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .contact-card {
@@ -1140,7 +1140,7 @@ section {
 
 .contact-cta {
   text-align: center;
-  padding: 2.5rem 1.5rem;
+  padding: 2rem 1.5rem;
   background: var(--bg2);
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -1155,7 +1155,7 @@ section {
 /* ── FOOTER ── */
 footer {
   border-top: 1px solid var(--border);
-  padding: 2.5rem 1.5rem;
+  padding: 2rem 1.5rem;
   text-align: center;
   font-size: 0.85rem;
   color: var(--text3);
@@ -1198,6 +1198,6 @@ footer span {
 
 /* RESPONSIVE MEDIA QUERIES */
 @media (max-width: 768px) {
-  section { padding: 4rem 1rem; }
+  section { padding: 3rem 1rem; }
   .projects-grid, .certs-grid, .contact-grid { grid-template-columns: 1fr; }
 }

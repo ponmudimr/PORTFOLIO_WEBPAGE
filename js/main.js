@@ -316,44 +316,4 @@
   }, { threshold: 0.2 });
   document.querySelectorAll('.skill-card').forEach(el => skillObs.observe(el));
 
-  // ── JOURNEY RAIL ───────────────────────────────────────────────────────────────
-  const railLinks = [...document.querySelectorAll('#journey-rail a')];
-  const railMap = new Map(railLinks.map(a => [a.getAttribute('href').slice(1), a]));
-  const railObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        railLinks.forEach(a => a.classList.remove('active'));
-        const link = railMap.get(e.target.id);
-        if (link) link.classList.add('active');
-      }
-    });
-  }, { threshold: 0.4 });
-  ['hero', 'about', 'skills', 'projects', 'certs', 'resume', 'contact']
-    .forEach(id => { const el = document.getElementById(id); if (el) railObs.observe(el); });
-
-  // ── SCROLL PROGRESS → CSS var ──────────────────────────────────────────────────
-  let _ticking = false;
-  addEventListener('scroll', () => {
-    if (_ticking) return; _ticking = true;
-    requestAnimationFrame(() => {
-      const max = document.documentElement.scrollHeight - innerHeight;
-      const p = max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
-      document.documentElement.style.setProperty('--scroll-progress', p);
-      _ticking = false;
-    });
-  }, { passive: true });
-
-  // ── LOADER WATCHDOG ────────────────────────────────────────────────────────────
-  // Safety timeout: If 3D engine fails to initialize or network drops Three.js CDN,
-  // force dismiss loader after 2.5s so user can view portfolio immediately.
-  setTimeout(() => {
-    const loader = document.getElementById('world-loader');
-    if (loader && !loader.classList.contains('hidden')) {
-      loader.classList.add('hidden');
-      document.body.classList.add('immersive', 'immersive-fallback');
-      const rail = document.getElementById('journey-rail');
-      if (rail) rail.style.display = 'flex';
-    }
-  }, 2500);
-
 })();

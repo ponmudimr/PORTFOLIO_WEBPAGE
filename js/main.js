@@ -104,8 +104,59 @@
       <div class="skill-card" tabindex="0" role="group" aria-label="${s.name} skill level ${Math.round(s.level * 100)}%">
         <span class="skill-icon">${s.icon}</span>
         <div class="skill-name">${s.name}</div>
-        <div class="skill-level" title="${Math.round(s.level * 100)}%"><div class="skill-fill" style="transform:scaleX(${s.level})"></div></div>
+        <div class="skill-level"><div class="skill-fill" style="transform:scaleX(${s.level})"></div></div>
+        <div class="skill-percentage">${Math.round(s.level * 100)}%</div>
       </div>`).join('');
+  }
+
+  // ── OPEN SOURCE ──────────────────────────────────────────────────────────────
+  const OS = DATA.openSource;
+  if (OS) {
+    const philEl = document.getElementById('os-philosophy');
+    if (philEl) philEl.textContent = OS.philosophy;
+
+    const contribEl = document.getElementById('os-contribution');
+    if (contribEl && OS.featuredContribution) {
+      const c = OS.featuredContribution;
+      const dateStr = new Date(c.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      contribEl.innerHTML = `
+        <a href="${c.url}" target="_blank" rel="noopener noreferrer" class="os-contribution-link">
+          <div class="os-contribution-meta"><span class="os-merged-badge">${c.merged ? 'merged' : 'open'}</span> ${c.repo} · ${dateStr}</div>
+          <div class="os-contribution-title">${c.title}</div>
+          <p class="os-contribution-detail">${c.detail}</p>
+        </a>`;
+    }
+
+    const reposEl = document.getElementById('os-repos-grid');
+    if (reposEl && OS.repos) {
+      reposEl.innerHTML = OS.repos.map(r => `
+        <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="os-repo-card">
+          <div class="os-repo-name">${r.name}</div>
+          <p class="os-repo-desc">${r.desc}</p>
+          <div class="os-repo-meta">
+            ${r.lang ? `<span>${r.lang}</span>` : ''}
+            ${r.stars ? `<span>★ ${r.stars}</span>` : ''}
+          </div>
+        </a>`).join('');
+    }
+
+    const statsImg = document.getElementById('os-stats-img');
+    const langsImg = document.getElementById('os-langs-img');
+    if (statsImg && langsImg && OS.githubUsername) {
+      [statsImg, langsImg].forEach(img => {
+        img.addEventListener('error', () => { img.hidden = true; });
+        img.addEventListener('load', () => { img.hidden = false; });
+      });
+      const setGhImages = (isDark) => {
+        const title = isDark ? '3fb950' : '1e7a34';
+        const icon = isDark ? '3fb950' : '1e7a34';
+        const text = isDark ? 'e8e6e1' : '1a1d21';
+        statsImg.src = `https://github-readme-stats.vercel.app/api?username=${OS.githubUsername}&show_icons=true&hide_border=true&bg_color=00000000&title_color=${title}&icon_color=${icon}&text_color=${text}&hide=stars`;
+        langsImg.src = `https://github-readme-stats.vercel.app/api/top-langs/?username=${OS.githubUsername}&layout=compact&hide_border=true&bg_color=00000000&title_color=${title}&text_color=${text}&langs_count=6`;
+      };
+      setGhImages(window.PortfolioTheme ? window.PortfolioTheme.isDark() : false);
+      if (window.PortfolioTheme) window.PortfolioTheme.onChange(setGhImages);
+    }
   }
 
   // ── PROJECTS ──────────────────────────────────────────────────────────────────
@@ -116,6 +167,7 @@
         <div class="project-num">${p.num}</div>
         <div class="project-title">${p.title}</div>
         <div class="project-tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        ${p.builtWith ? `<div class="project-built-with"><span>built with</span> ${p.builtWith}</div>` : ''}
         <div class="project-arrow">Explore <span>→</span></div>
       </div>`).join('');
 

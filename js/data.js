@@ -18,35 +18,57 @@ window.PORTFOLIO_DATA = {
     resumePdf: 'assets/Ponmudi_MR_Resume_2026.pdf',
     photo: 'assets/MYPHOTO.JPG',
     qrCode: 'assets/portfolio-qr.png',
-    bio: 'Electronics & Communication Engineering student at Bannari Amman Institute of Technology with a deep passion for embedded systems, RF/SDR communications, and defense-oriented technology. I lead Team 404 (with Dinesh & Pratiksha) and have built systems ranging from LoRa mesh networks deployed for rural connectivity to LEO satellite positioning receivers. I am actively seeking research roles at DRDO, ISRO, and NIT Trichy.',
+    bio: 'Electronics & Communication Engineering student at Bannari Amman Institute of Technology, and increasingly a Linux user who\'d rather read the source than file a ticket. I lead Team 404 (with Dinesh & Pratiksha), building systems from LoRa mesh networks for rural connectivity to LEO satellite positioning receivers — on open toolchains: Linux, KiCad, and open SDR drivers instead of vendor lock-in. I send fixes upstream when I hit them, not just forks when I need them, and I\'m looking for research roles at DRDO, ISRO, and NIT Trichy where that habit is useful.',
     stats: [
-      { num: '3+', label: 'PROJECTS' },
-      { num: '₹50K', label: 'PRIZE WON' },
-      { num: 'IEEE', label: 'MEMBER' },
-      { num: '2029', label: 'GRADUATING' }
+      { num: '3+', label: 'projects' },
+      { num: '₹50K', label: 'prize won' },
+      { num: 'IEEE', label: 'member' },
+      { num: '2029', label: 'graduating' }
     ]
   },
 
   typingTitles: [
-    'ECE Student',
-    'Embedded Systems Developer',
-    'Defense Tech Innovator',
+    'Linux Developer',
+    'Open-Source Contributor',
+    'Embedded Systems Engineer',
     'RF & SDR Engineer',
     'Team 404 Lead'
   ],
 
   skills: [
+    { icon: '🐧', name: 'Linux', level: 0.86 },
+    { icon: '🐙', name: 'Git & GitHub', level: 0.85 },
+    { icon: '🐚', name: 'Bash & Shell Scripting', level: 0.8 },
     { icon: '⚙️', name: 'C Programming', level: 0.9 },
-    { icon: '🤖', name: 'Arduino', level: 0.88 },
-    { icon: '📟', name: 'ESP32', level: 0.85 },
-    { icon: '🐧', name: 'Linux', level: 0.8 },
     { icon: '🔌', name: 'Embedded Systems', level: 0.87 },
-    { icon: '🌐', name: 'IoT', level: 0.82 },
+    { icon: '📟', name: 'ESP32', level: 0.85 },
+    { icon: '🤖', name: 'Arduino', level: 0.88 },
     { icon: '📡', name: 'RF & SDR', level: 0.75 },
+    { icon: '🌐', name: 'IoT', level: 0.82 },
     { icon: '🚁', name: 'Drone Technology', level: 0.7 },
-    { icon: '💻', name: 'Frontend Design', level: 0.72 },
-    { icon: '🐙', name: 'Git & GitHub', level: 0.85 }
+    { icon: '💻', name: 'Frontend Design', level: 0.72 }
   ],
+
+  openSource: {
+    philosophy: 'I run Linux as my daily driver, not a hobby OS I dual-boot into once a month. If a tool doesn\'t do what I need, my first move is to read the source. That habit is why I\'ve started sending fixes upstream instead of just patching my own copy and moving on — a hardcoded WiFi/MQTT credential in a teammate\'s firmware, a captive-portal login script that\'s now saved 9 other people the same 40 minutes of typing a password on a phone keyboard. Small, real, merged.',
+    featuredContribution: {
+      repo: 'idharshini/Proj-Vega',
+      title: 'Move WiFi/MQTT credentials out of source, avoid permanent hang on WiFi init failure',
+      url: 'https://github.com/idharshini/Proj-Vega/pull/1',
+      detail: 'Pulled hardcoded network credentials out of the firmware source, fixed a boot hang when WiFi init failed, and documented a float byte-order assumption other contributors kept tripping on.',
+      merged: true,
+      date: '2026-09-10'
+    },
+    repos: [
+      { name: 'auto-internet-login', desc: 'Automate login for BIT’s WiFi captive portal — one command to deauth your old session and connect a new device. Linux only.', lang: 'Shell', stars: 9, url: 'https://github.com/ponmudimr/auto-internet-login' },
+      { name: 'police_siren', desc: 'A 5-day PCB design journey: a police-siren LED circuit taken through KiCad, schematic to layout to fabrication to soldering.', lang: 'KiCad', stars: 4, url: 'https://github.com/ponmudimr/police_siren' },
+      { name: 'C_PROGRAMING', desc: 'Programs written while learning C — patterns, a calculator, and small mini-projects.', lang: 'C', stars: 2, url: 'https://github.com/ponmudimr/C_PROGRAMING' },
+      { name: 'zero-hour-digital-clock', desc: 'A 24-hour digital clock from pure discrete logic — 555 timer plus six CD4026s, no microcontroller. The CHRONOBIT \'26 build.', lang: null, stars: 1, url: 'https://github.com/ponmudimr/zero-hour-digital-clock' },
+      { name: 'leo-pnt-receiver', desc: 'GPS-denied positioning using LEO satellite signals, RTL-SDR, and ML-based spectrum sensing.', lang: 'Python', stars: 1, url: 'https://github.com/ponmudimr/leo-pnt-receiver' },
+      { name: 'Zephyr', desc: 'Embedded systems and embedded Linux projects.', lang: null, stars: 0, url: 'https://github.com/ponmudimr/Zephyr' }
+    ],
+    githubUsername: 'ponmudimr'
+  },
 
   projects: [
     {
@@ -54,6 +76,7 @@ window.PORTFOLIO_DATA = {
       num: 'PROJECT 01',
       title: 'Autonomous Search & Intimation Drone for Navy and Army',
       tags: ['Drone', 'Embedded', 'Defense', 'RF', 'Autonomous'],
+      builtWith: 'Linux companion computer (Raspberry Pi) · OpenCV · open RTL-SDR drivers',
       desc: 'A fully autonomous UAV system designed for naval and army search-and-rescue operations in GPS-denied environments. The drone leverages SDR-based navigation, onboard computer vision, and encrypted RF uplink for real-time situational awareness.',
       tech: ['ESP32', 'RTL-SDR V4', 'Raspberry Pi', 'OpenCV', 'LoRa 433MHz', 'LiPo Power System', 'Custom PCB'],
       features: [
@@ -71,6 +94,7 @@ window.PORTFOLIO_DATA = {
       num: 'PROJECT 02',
       title: 'Powerloom Fabric Length Measurement Sensor System',
       tags: ['IoT', 'Sensors', 'Industrial', 'ESP32', 'BLE'],
+      builtWith: 'ESP-IDF/Arduino open toolchain · Node-RED (OSS) · open BLE stack',
       desc: 'An industry-deployed sensor system for real-time fabric length measurement on powerloom machines at Kumarapalayam, Namakkal. Replaces manual counting with a low-cost, highly accurate optical encoder + MCU solution.',
       tech: ['ESP32', 'Optical Encoder', 'BLE', 'Node-RED', 'OLED Display', '3D Printed Housing', '12V Industrial Power'],
       features: [
@@ -88,6 +112,7 @@ window.PORTFOLIO_DATA = {
       num: 'PROJECT 03',
       title: 'Universal Bluetooth Keyboard Adapter',
       tags: ['BLE', 'HID', 'Arduino', 'Firmware', 'Accessibility'],
+      builtWith: 'Arduino open toolchain · open-source HID/BLE libraries',
       desc: 'A hardware adapter that converts any legacy PS/2 or USB wired keyboard into a modern Bluetooth HID device. Enables use of classic mechanical keyboards with tablets and smartphones without a physical connection.',
       tech: ['Arduino Pro Micro', 'HC-05 BLE Module', 'PS/2 Protocol', 'HID Firmware', 'Custom PCB', '3D Printed Enclosure'],
       features: [
@@ -105,6 +130,7 @@ window.PORTFOLIO_DATA = {
       num: 'PROJECT 04',
       title: 'Linux Automation Projects',
       tags: ['Linux', 'Bash', 'Python', 'Networking', 'Server'],
+      builtWith: 'Built entirely on open tooling — Bash, Python, SatDump, JAERO, WireGuard-based Tailscale',
       desc: 'A collection of automation tools and scripts built on Linux for home server management, EZVIZ camera routing via Tailscale, photo backup workflows with FreeFileSync, and radio signal processing pipelines for SDR work.',
       tech: ['Linux Mint', 'Bash', 'Python', 'Tailscale', 'FreeFileSync', 'Tonfotos', 'SatDump', 'JAERO'],
       features: [
@@ -123,6 +149,7 @@ window.PORTFOLIO_DATA = {
       title: 'Smart Embedded Systems — TribalNet & LEO-PNT',
       img: 'assets/nhidepresentation.JPG',
       tags: ['LoRa', 'LEO', 'SDR', 'ESP32', 'Navigation', 'Defense'],
+      builtWith: 'RTL-SDR open drivers · SatDump (OSS) · Linux-based SDR pipeline',
       desc: 'Two flagship smart embedded systems: (1) TribalNet — a 10km LoRa mesh network for off-grid tribal communication at ₹1,500/node, winner of NHIDE 2026 (₹50,000). (2) Cognitive Opportunistic LEO-PNT Receiver — an SDR system exploiting LEO satellite signals for GPS-denied navigation, submitted for defense innovation challenge.',
       tech: ['ESP32 WROOM-32E', 'SX1278 LoRa 433MHz', 'MAX7219 LED', 'RTL-SDR V4', 'Raspberry Pi 5', 'ICM-42688 IMU', 'SatDump v1.2.2'],
       features: [
@@ -187,6 +214,11 @@ window.PORTFOLIO_DATA = {
   ],
 
   timeline: [
+    {
+      year: '2026',
+      title: 'Merged PR — Proj-Vega WiFi/MQTT hardening',
+      desc: 'Pulled hardcoded credentials out of a teammate\'s firmware and fixed a WiFi-init boot hang · github.com/idharshini/Proj-Vega'
+    },
     {
       year: '2026',
       title: 'CHRONOBIT \'26 — 2nd Place',

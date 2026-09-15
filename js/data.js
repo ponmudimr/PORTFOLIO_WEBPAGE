@@ -160,10 +160,37 @@ window.PORTFOLIO_DATA = {
       ],
       challenges: 'For TribalNet: achieving reliable mesh routing under dense forest canopy at 433 MHz required adaptive power control. For LEO-PNT: Doppler shift correction on Orbcomm bursts at 137 MHz demanded real-time DSP tuning.',
       future: 'TribalNet: SOS beacon mode, solar-powered nodes. LEO-PNT: patent filing (IPC G01S19/00), integration with military PNT standards.'
+    },
+    {
+      id: 'F',
+      num: 'PROJECT 06',
+      title: 'Vega-IoT Gateway — Industrial IoT & AR Smart Helmet',
+      img: 'assets/embrix-vegathon-team.jpeg',
+      tags: ['IoT', 'Modbus', 'RISC-V', 'LoRa', 'AR', 'Industry 4.0'],
+      builtWith: 'ARIES v2.0 (C-DAC\'s indigenous RISC-V board) · open Modbus/MQTT stacks · 2nd Prize ₹10,000 at Embrix\'26 Vegathon',
+      desc: 'An industrial IoT gateway built in 48 hours with Team Vega, polling multiple machines simultaneously over Modbus and streaming the data via LoRa/WiFi/Bluetooth/Ethernet to the cloud, paired with an AR smart helmet that puts a live dashboard in front of the worker on the factory floor. A small step toward Industry 4.0 adoption for Indian SME manufacturing still running on manual, legacy monitoring.',
+      tech: ['ARIES v2.0 RISC-V', 'Modbus RTU/TCP', 'LoRa', 'WiFi', 'Bluetooth', 'Ethernet', 'MQTT', 'AR Smart Helmet'],
+      features: [
+        'Simultaneous Modbus polling across multiple machines',
+        'Multi-transport uplink: LoRa / WiFi / Bluetooth / Ethernet',
+        'AR smart helmet with live dashboard for factory-floor workers',
+        'Built on ARIES v2.0 — C-DAC\'s indigenous RISC-V processor',
+        'Targeted at legacy SME factories with manual monitoring'
+      ],
+      challenges: 'Polling several Modbus slaves concurrently without blocking the uplink pipeline, and getting a usable live dashboard rendered on the AR helmet within the 48-hour build window, meant tight toolchain debugging on the ARIES RISC-V board right up to the pitch.',
+      future: 'Predictive maintenance from the polled machine data, OTA firmware updates for the gateway nodes, and a production-ready AR helmet UI.'
     }
   ],
 
   certs: [
+    {
+      title: 'Embrix\'26 Vegathon — 2nd Prize · Vega-IoT Gateway',
+      by: 'National Embedded Systems & Edge AI Hackathon — Bannari Amman Institute of Technology, in collaboration with C-DAC, Thiruvananthapuram',
+      year: '2026',
+      cat: 'Award',
+      id: 'Team Vega · 2nd Prize ₹10,000',
+      img: 'assets/embrix-vegathon-certificate.jpeg'
+    },
     {
       title: 'CHRONOBIT \'26 — 2nd Place · Digital Clock (Discrete IC Design)',
       by: 'Digital Electronics Internal Hackathon — Dept. of ECE, Bannari Amman Institute of Technology',
@@ -214,6 +241,11 @@ window.PORTFOLIO_DATA = {
   ],
 
   timeline: [
+    {
+      year: '2026',
+      title: 'Embrix\'26 Vegathon — 2nd Prize ₹10,000',
+      desc: 'National Embedded Systems & Edge AI Hackathon, BIT Sathy × C-DAC Thiruvananthapuram · Team Vega with Shreevishnu R S, Dharshini I & Dinesh P · Built the Vega-IoT Gateway on the ARIES v2.0 RISC-V board'
+    },
     {
       year: '2026',
       title: 'Merged PR — Proj-Vega WiFi/MQTT hardening',

@@ -140,23 +140,6 @@
         </a>`).join('');
     }
 
-    const statsImg = document.getElementById('os-stats-img');
-    const langsImg = document.getElementById('os-langs-img');
-    if (statsImg && langsImg && OS.githubUsername) {
-      [statsImg, langsImg].forEach(img => {
-        img.addEventListener('error', () => { img.hidden = true; });
-        img.addEventListener('load', () => { img.hidden = false; });
-      });
-      const setGhImages = (isDark) => {
-        const title = isDark ? '3fb950' : '1e7a34';
-        const icon = isDark ? '3fb950' : '1e7a34';
-        const text = isDark ? 'e8e6e1' : '1a1d21';
-        statsImg.src = `https://github-readme-stats.vercel.app/api?username=${OS.githubUsername}&show_icons=true&hide_border=true&bg_color=00000000&title_color=${title}&icon_color=${icon}&text_color=${text}&hide=stars`;
-        langsImg.src = `https://github-readme-stats.vercel.app/api/top-langs/?username=${OS.githubUsername}&layout=compact&hide_border=true&bg_color=00000000&title_color=${title}&text_color=${text}&langs_count=6`;
-      };
-      setGhImages(window.PortfolioTheme ? window.PortfolioTheme.isDark() : false);
-      if (window.PortfolioTheme) window.PortfolioTheme.onChange(setGhImages);
-    }
   }
 
   // ── PROJECTS ──────────────────────────────────────────────────────────────────

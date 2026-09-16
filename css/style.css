@@ -750,19 +750,6 @@ section {
   gap: 0.9rem;
 }
 
-.os-stats-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  align-items: flex-start;
-}
-
-.os-stats-img {
-  flex: 1 1 300px;
-  max-width: 420px;
-  border-radius: var(--radius-sm);
-}
-
 /* ── PROJECTS ── */
 .projects-grid {
   display: grid;
